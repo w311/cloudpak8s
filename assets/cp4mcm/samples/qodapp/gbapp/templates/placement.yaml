@@ -1,0 +1,15 @@
+{{- if .Values.placement.multicluster.enabled }}
+apiVersion: app.ibm.com/v1alpha1
+kind: PlacementRule
+metadata:
+  name: {{ template "guestbookapplication.fullname" . }}
+  labels:
+    app: {{ template "guestbookapplication.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  clusterReplicas: {{ .Values.clusterReplicas }}
+  clusterLabels:
+{{ toYaml .Values.placement.multicluster.labelSelector | indent 4 }}
+{{- end }}

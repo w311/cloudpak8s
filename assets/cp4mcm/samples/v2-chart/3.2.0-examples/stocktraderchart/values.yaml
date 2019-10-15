@@ -1,0 +1,61 @@
+# Default values for trader.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+clusterReplicas: 1
+
+appInClusterNamespace: default
+
+targetCluster:
+  labelSelector:
+    matchLabels:
+      environment: Dev
+      datacenter: rtp
+  resourceSelector:
+    type: cpu
+  compliances: "" 
+
+
+loyaltyLevel:
+  replicaCount: 1
+  image:
+    repository: ibmstocktrader/loyalty-level
+    tag: latest
+    pullPolicy: IfNotPresent
+portfolio:
+  replicaCount: 1
+  image:
+    repository: ibmstocktrader/portfolio
+    tag: latest
+    pullPolicy: IfNotPresent
+stockQuote:
+  replicaCount: 1
+  image:
+    repository: ibmstocktrader/stock-quote
+    tag: latest
+    pullPolicy: IfNotPresent
+trader:
+  replicaCount: 1
+  image:
+    repository: ibmstocktrader/trader
+    tag: basicregistry
+    pullPolicy: IfNotPresent
+tradr:
+  replicaCount: 1
+  image:
+    repository: ibmstocktrader/tradr
+    tag: latest
+    pullPolicy: IfNotPresent
+messaging:
+  replicaCount: 1
+  image:
+    repository: ibmstocktrader/messaging
+    tag: latest
+    pullPolicy: IfNotPresent
+notificationTwitter:
+  replicaCount: 1
+  image:
+    repository: ibmstocktrader/notification-twitter
+    tag: latest
+    pullPolicy: IfNotPresent
+

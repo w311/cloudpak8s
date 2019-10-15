@@ -1,0 +1,14 @@
+appInClusterNamespace: default
+
+clusterReplicas: 1
+
+placement:
+  multicluster:
+    enabled: true
+    labelSelector:
+      matchLabels:
+        environment: Dev
+
+channel:
+  name: devchn
+  namespace: devchn

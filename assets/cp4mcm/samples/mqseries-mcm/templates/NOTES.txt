@@ -1,0 +1,5 @@
+Demonstration of a Multi Cloud Manager wrapped MQSeries server that will by default bind to the first cluster where 
+ 'environment' is set to 'Dev'
+
+July 2019 - Richard Hine
+

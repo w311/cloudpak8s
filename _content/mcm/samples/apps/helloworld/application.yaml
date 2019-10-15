@@ -1,0 +1,95 @@
+apiVersion: app.k8s.io/v1beta1
+#apiVersion: mcm.ibm.com/v1alpha1
+kind: Application
+metadata:
+  namespace: default
+  name: nginxdemo
+  labels:
+    name: nginxdemo
+spec:
+  selector:
+    #matchLabels:
+    #  hcmapp: nginxdemo
+    matchExpressions:
+    - key: app
+      operator: In
+      values:
+      - nginxdemo
+  componentKinds:
+  - group: mcm.ibm.com/v1alpha1
+    kind: PlacementPolicy
+---
+apiVersion: mcm.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: nginxdemo
+  namespace: default
+  labels:
+    name: nginxdemo
+    #hcmapp: nginxdemo
+    app: nginxdemo
+    serviceKind: ApplicationService
+spec:
+  deployer:
+    kind: helm
+    helm:
+      chartURL: https://raw.githubusercontent.com/IBM/charts/master/repo/stable/ibm-nginx-dev-1.0.1.tgz
+      #repository: ibm-charts
+      #chartName: ibm-nginx-dev
+      version: 1.0.1
+      #chartVersion: 1.0.1
+      #values: "configMapName=1demo-nginx-configmap"
+      #values: Y29uZmlnTWFwTmFtZT0xZGVtby1uZ2lueC1jb25maWdtYXA=
+      #values: '{"configMapName": "1demo-nginx-configmap","replicaCount": "2"}'
+      values: eyJjb25maWdNYXBOYW1lIjogIjFkZW1vLW5naW54LWNvbmZpZ21hcCIsInJlcGxpY2FDb3VudCI6IDJ9Cg==
+      namespace: default
+---
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementPolicy
+metadata:
+  name: nginxdemo
+  namespace: default
+  labels:
+    name: nginxdemo
+    #hcmapp: nginxdemo
+    app: nginxdemo
+spec:
+  #replicas: 1
+  #clusterSelector:
+  clusterReplicas: 1
+  clusterLabels:
+    matchLabels:
+      environment: trivial
+---
+apiVersion: mcm.ibm.com/v1alpha1
+kind: ApplicationRelationship
+metadata:
+    name: nginx-apprelation
+    labels:
+      #hcmapp: nginxdemo
+      app: nginxdemo
+spec:
+  type: contains
+  source:
+    kind: Application
+    name: nginxdemo
+  destination:
+    kind: Deployable
+    name: nginxdemo
+---
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementBinding
+metadata:
+  labels:
+    app: nginxdemo
+    name: nginxdemo
+    placementPolicy: nginxdemo
+  name: nginxdemo-placementbinding
+placementRef:
+  apiGroup: mcm.ibm.com
+  kind: PlacementPolicy
+  name: nginxdemo
+subjects:
+- apiGroup: mcm.ibm.com
+  kind: Deployable
+  name: nginxdemo

@@ -1,0 +1,187 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: subscription-operator
+  namespace: ibm-apps
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: subscription-operator
+      component: subscription-operator
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        productID: 317a72a4f22645aaa1b7a07a83c60af5
+        productName: IBM Multicloud Manager - Server
+        productVersion: 3.1.1
+      creationTimestamp: null
+      labels:
+        app: subscription-operator
+        component: subscription-operator
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: beta.kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+      containers:
+      - args:
+        - --alsologtostderr
+        command:
+        - ./manager
+        image: hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/deployable-objectstore:latest
+        imagePullPolicy: Always
+        livenessProbe:
+          exec:
+            command:
+            - ls
+          failureThreshold: 3
+          initialDelaySeconds: 15
+          periodSeconds: 15
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: deployable-objectstore-controller
+        readinessProbe:
+          exec:
+            command:
+            - ls
+          failureThreshold: 3
+          initialDelaySeconds: 15
+          periodSeconds: 15
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 25m
+            memory: 256Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          privileged: false
+          readOnlyRootFilesystem: false
+          runAsNonRoot: true
+          runAsUser: 1000280001
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      - args:
+        - --alsologtostderr
+        command:
+        - ./manager
+        image: hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/channel:latest
+        imagePullPolicy: Always
+        livenessProbe:
+          exec:
+            command:
+            - ls
+          failureThreshold: 3
+          initialDelaySeconds: 15
+          periodSeconds: 15
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: channel-controller
+        readinessProbe:
+          exec:
+            command:
+            - ls
+          failureThreshold: 3
+          initialDelaySeconds: 15
+          periodSeconds: 15
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 25m
+            memory: 256Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          privileged: false
+          readOnlyRootFilesystem: false
+          runAsNonRoot: true
+          runAsUser: 1000280001
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      - args:
+        - --alsologtostderr
+        - --managed-cluster-name=local-cluster
+        - --managed-cluster-namespace=local-cluster
+        - --sync-interval=10
+        command:
+        - ./manager
+        image: hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/subscription:latest
+        imagePullPolicy: Always
+        livenessProbe:
+          exec:
+            command:
+            - ls
+          failureThreshold: 3
+          initialDelaySeconds: 15
+          periodSeconds: 15
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: subscription-controller
+        readinessProbe:
+          exec:
+            command:
+            - ls
+          failureThreshold: 3
+          initialDelaySeconds: 15
+          periodSeconds: 15
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 25m
+            memory: 256Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          privileged: false
+          readOnlyRootFilesystem: false
+          runAsNonRoot: true
+          runAsUser: 1000280001
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: ibm-mcm-integration
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000280001
+      serviceAccount: ibm-multicluster
+      serviceAccountName: ibm-multicluster
+      terminationGracePeriodSeconds: 30
+      tolerations:
+      - effect: NoSchedule
+        key: dedicated
+        operator: Exists
+status:

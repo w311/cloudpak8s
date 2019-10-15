@@ -1,0 +1,13 @@
+# MCM values
+replicaCount: 1
+
+appInClusterNamespace: mq
+
+targetCluster:
+  labelSelector:
+    matchLabels:
+      environment: Dev
+  resourceSelector:
+    type: cpu
+  compliances: ""
+

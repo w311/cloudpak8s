@@ -1,0 +1,41 @@
+apiVersion: compliance.mcm.ibm.com/v1alpha1
+kind: Compliance
+metadata:
+  name: default-dev
+  namespace: mcm
+spec:
+  runtime-rules:
+    - apiVersion: policy.mcm.ibm.com/v1alpha1
+      kind: Policy
+      metadata:
+        name: policy-dev
+        labels:
+          targets: dev
+      spec:
+        remediationAction: "enforce" # enforce or inform 
+        complianceType: "musthave" # used as default, when missing in a particular sub-template
+        namespaces:
+          include: ["default"]
+          exclude: ["kube*"]
+        object-templates:
+          - complianceType: "musthave"
+            objectDefinition:
+              kind: Pod
+              apiVersion: v1      
+              metadata:
+                name: websphere-liberty
+              spec:
+                containers:
+                - name: websphere-liberty
+                  image: websphere-liberty:18.0.0.4-microProfile1
+                  ports:
+                  - containerPort: 9080
+                  env:
+                    - name: LICENSE
+                      value:
+                    - name: WLP_LOGGING_CONSOLE_FORMAT
+                      value: json
+                    - name: WLP_LOGGING_CONSOLE_LOGLEVEL
+                      value: info
+                    - name : WLP_LOGGING_CONSOLE_SOURCE
+                      value: message,trace,accessLog,ffdc

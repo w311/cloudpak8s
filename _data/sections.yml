@@ -1,0 +1,28 @@
+default:
+  title: IBM Cloud Paks Playbook
+  icon: book
+  hidden: true
+
+automation:
+  title: Cloud Pak for Automation
+  icon: rocket
+
+integration:
+  title: Cloud Pak for Integration
+  icon: sitemap
+
+data:
+  title: Cloud Pak for Data
+  icon: pencil
+
+mcm:
+  title: Cloud Pak for Multicloud Management
+  icon: wrench
+
+apps:
+  title: Cloud Pak for Applications
+  icon: code
+
+ocp:
+  title: OpenShift and common services
+  icon: book

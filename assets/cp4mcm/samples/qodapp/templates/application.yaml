@@ -1,0 +1,31 @@
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  namespace: default
+  name: {{ template "qodapp.fullname" . }}
+  labels:
+    name: {{ template "qodapp.fullname" . }}
+    app: {{ template "qodapp.fullname" . }}
+spec:
+  componentKinds:
+    - group: mcm.ibm.com/v1alpha1
+      kind: PlacementPolicy
+  descriptor: {}
+  selector:
+    matchExpressions:
+    - key: app
+      operator: In
+      values:
+      - qodapp
+      - api
+      - web
+      - db
+  componentKinds:
+  - group: core
+    kind: Pods
+  - group: core
+    kind: Service
+  - group: apps
+    kind: Deployment
+  - group: apps
+    kind: StatefulSet

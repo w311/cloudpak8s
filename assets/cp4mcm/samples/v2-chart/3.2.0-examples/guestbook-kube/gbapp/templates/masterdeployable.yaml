@@ -1,0 +1,71 @@
+apiVersion: mcm.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: {{ template "guestbookapplication.fullname" . }}-redismaster
+  labels:
+    app: {{ template "guestbookapplication.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    name: {{ template "guestbookapplication.fullname" . }}-redismaster
+    servicekind: CacheService
+spec:
+  deployer:
+    kind: Deployment
+    kube:
+      namespace: {{ .Values.appInClusterNamespace }}
+      template:
+        metadata:
+          name: {{ template "guestbookapplication.fullname" . }}-redismaster
+        spec:
+          selector:
+            matchLabels:
+              app: {{ template "guestbookapplication.name" . }}
+              release: {{ .Release.Name }}
+              role: master
+              tier: backend
+          replicas: {{ .Values.redismaster.replicaCount }}
+          template:
+            metadata:
+              labels:
+                app: {{ template "guestbookapplication.name" . }}
+                release: {{ .Release.Name }}
+                role: master
+                tier: backend
+            spec:
+              containers:
+                - name: redis
+                  image: "{{ .Values.redismaster.repository }}:{{ .Values.redismaster.tag }}"
+                  imagePullPolicy: {{ .Values.redismaster.pullPolicy }}
+                  ports:
+                    - containerPort: 6379
+---
+apiVersion: mcm.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: {{ template "guestbookapplication.fullname" . }}-redismasterservice
+  labels:
+    app: {{ template "guestbookapplication.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    name: {{ template "guestbookapplication.fullname" . }}-redismasterservice
+    servicekind: CacheService
+spec:
+  deployer:
+    kind: Service
+    kube:
+      namespace: {{ .Values.appInClusterNamespace }}
+      template:
+        metadata:
+          name: redis-master
+        spec:
+          type: {{ .Values.redismaster.service.type }}
+          ports:
+            - port: 6379
+          selector:
+            app: {{ template "guestbookapplication.name" . }}
+            release: {{ .Release.Name }}
+            role: master
+            tier: backend
+ 

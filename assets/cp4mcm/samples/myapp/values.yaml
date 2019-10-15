@@ -1,0 +1,12 @@
+# Default values for qodapp.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+appInClusterNamespace: default
+
+targetCluster:
+  apidatacenter: "dmzcluster"
+  webdatacenter: "dmzcluster"
+  dbdatacenter: "dmzcluster"

@@ -1,0 +1,32 @@
+---
+# Requires ConfigMap/Secret to be configured
+# See https://developer.ibm.com/recipes/tutorials/extend-your-kubernetes-app-with-watson-on-ibm-cloud-private/
+apiVersion: app.ibm.com/v1alpha1
+kind: Subscription
+metadata:
+  labels:
+    purpose: watson-conv
+  name: watson-api
+  namespace: default
+spec:
+  channel: watson-cloudpak-channel/dev
+  placement:
+    multicluster:
+      enabled: true
+      labelSelector:
+        matchLabels:
+          environment: Dev
+
+---
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: watson-conv
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      purpose: watson-conv
+  componentKinds:
+  - group: app.ibm.com/v1alpha1
+    kind: Subscription

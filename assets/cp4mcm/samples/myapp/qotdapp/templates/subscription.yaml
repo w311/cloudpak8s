@@ -1,0 +1,20 @@
+apiVersion: app.ibm.com/v1alpha1
+kind: Subscription
+metadata:
+  name: qotdsub
+  labels:
+    app: qotdapp
+spec:
+  channel: entitlement/qotd
+  name: nginx-ingress
+  placement:
+    placementRef:
+      name: qotdrule
+      kind: PlacementRule
+      group: app.ibm.com
+  overrides:
+  - clusterName: "/"
+    clusterOverrides:
+    - path: "metadata.namespace"
+      value: default
+

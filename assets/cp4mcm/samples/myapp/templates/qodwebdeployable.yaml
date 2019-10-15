@@ -1,0 +1,14 @@
+apiVersion: mcm.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: {{ template "qodapp.fullname" . }}-web
+  labels:
+    name: {{ template "qodapp.fullname" . }}-web
+    app: {{ template "qodapp.fullname" . }}
+    servicekind: ApplicationService
+spec:
+  deployer:
+    kind: helm
+    helm:
+      chartURL: https://gitlab.169.60.97.238.nip.io/quote-of-the-day/qod-web/raw/master/deployment/qod-web-1.0.0.tgz 
+      namespace: {{ .Values.appInClusterNamespace }}

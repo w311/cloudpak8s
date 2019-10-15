@@ -1,0 +1,11 @@
+apiVersion: v1
+appVersion: 9.1.2.0
+description: MCM Enabled MQSeries Spoke Server
+icon: https://raw.githubusercontent.com/IBM/charts/master/logo/ibm-mq-purple-icon.png
+keywords:
+- Limited
+- ICP
+kubeVersion: '>=1.9.0'
+name: mqseries-mcm
+tillerVersion: '>=2.9.1'
+version: 0.1.0

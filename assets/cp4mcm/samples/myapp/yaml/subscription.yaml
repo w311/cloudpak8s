@@ -1,0 +1,23 @@
+apiVersion: app.ibm.com/v1alpha1
+kind: Subscription
+metadata:
+  annotations:
+    tillerVersion: 2.4.0
+  name: qotdsub
+  namespace: default
+  labels:
+    app: qotdapp
+spec:
+  channel: entitlement/qotdchn
+  name: qod-web
+  packageFilter:
+    annotations:
+      tillerVersion: 2.4.0
+    version: "1.0.0"
+  packageOverrides:
+  - packageName: qod-web
+    packageOverrides:
+    - path: spec.values
+      value: |
+          valueName1: value 1
+          valueName2: value 2

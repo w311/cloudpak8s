@@ -1,0 +1,22 @@
+apiVersion: mcm.ibm.com/v1alpha1
+kind: DeployableOverride
+metadata:
+  name: nginxdemo
+  labels:
+    app: nginxdemo
+    name: ngindemo
+    servicekind: ApplicationService
+spec:
+  overrides:
+  - clusterName: rhos
+    template:
+      deployer:
+        kind: helm
+        helm:
+            chartURL: https://raw.githubusercontent.com/IBM/charts/master/repo/stable/ibm-nginx-dev-1.0.1.tgz
+            #repository: ibm-charts
+            #chartName: ibm-nginx-dev
+            namespace: default
+            version: 1.0.1
+            # values: {"configMapName": "1demo-nginx-configmap","replicaCount": 3}
+            values: e2NvbmZpZ01hcE5hbWU6IDFkZW1vLW5naW54LWNvbmZpZ21hcCxyZXBsaWNhQ291bnQ6IDN9Cg==

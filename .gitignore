@@ -1,0 +1,48 @@
+*.jekyll-metadata
+*.retry
+**/.DS_Store
+**/.config/
+.project
+
+# Ignore build-harness
+**/.build-harness
+**/.ignore/
+
+# Ignore TLS key files
+**/*.crt
+**/*.csr
+**/*.key
+
+# Ignore SSH files
+**/*.pem
+**/*.ssh_config
+**/kubectl.sh
+**/*_rsa
+**/*_rsa.pub
+!**/IBM_Root_CA.pem
+
+# Ignore Terraform tmp files/dirs
+**/.terraform/
+**/privatekey.pem
+**/.terraform.d
+**/terraform.tfstate
+**/terraform.tfstate.backup
+**/.terraform.tfstate.lock.info
+
+**/build-harness
+**/.build-harness
+
+# Ignore Vagrant tmp files/dirs
+**/.vagrant/
+
+# Ignore LXD files/dirs
+**/.config/lxc
+
+# Ignore .deploy dirs
+**/.deploy
+
+# Ignore vendor dir contents
+**/vendor/*
+!**/vendor/.gitkeep
+
+_site/*

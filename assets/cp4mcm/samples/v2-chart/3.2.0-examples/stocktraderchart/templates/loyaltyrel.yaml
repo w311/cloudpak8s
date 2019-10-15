@@ -1,0 +1,40 @@
+apiVersion: mcm.ibm.com/v1alpha1
+kind: ApplicationRelationship
+metadata:
+  name: {{ template "trader.name" . }}-loyaltyd
+  labels:
+    app: {{ template "trader.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    name: {{ template "trader.fullname" . }} 
+    solution: {{ template "trader.name" . }} 
+spec:
+  destination:
+    kind: Deployable
+    name: {{ template "trader.name" . }}-loyaltyd
+  source:
+    kind: Application
+    name: {{ template "trader.fullname" . }}
+  type: contains
+
+---
+apiVersion: mcm.ibm.com/v1alpha1
+kind: ApplicationRelationship
+metadata:
+  name: {{ template "trader.name" . }}-loyalty-service
+  labels:
+    app: {{ template "trader.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    name: {{ template "trader.fullname" . }} 
+    solution: {{ template "trader.name" . }} 
+spec:
+  destination:
+    kind: Deployable
+    name: {{ template "trader.name" . }}-loyalty-service
+  source:
+    kind: Application
+    name: {{ template "trader.fullname" . }}
+  type: contains

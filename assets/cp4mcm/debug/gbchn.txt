@@ -1,0 +1,231 @@
+
+---
+# Source: gbchn/templates/channel.yaml
+apiVersion: app.ibm.com/v1alpha1
+kind: Channel
+metadata:
+  name: gbchn
+  labels:
+    app: gbchn
+    chart: gbchn-0.1.0
+    release: gbchn
+    heritage: Tiller
+spec:
+  type: Namespace
+  pathname: gbchn
+---
+# Source: gbchn/templates/frontenddeployables.yaml
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: gbchn-gbchn-frontend
+  annotations:
+    app.ibm.com/is-local-deployable: "false"
+  labels:
+    app: gbchn
+    chart: gbchn-0.1.0
+    release: gbchn
+    heritage: Tiller
+spec:
+  template:
+    kind: Deployment
+    apiVersion: apps/v1
+    metadata:
+      name: gbchn-gbchn-frontend
+    spec:
+      selector:
+        matchLabels:
+          app: gbchn
+          release: gbchn
+          tier: frontend
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: gbchn
+            release: gbchn
+            tier: frontend
+        spec:
+          containers:
+            - name: frontend
+              image: "gcr.io/google-samples/gb-frontend:v6"
+              imagePullPolicy: IfNotPresent
+              ports:
+                - containerPort: 80
+              env:
+              - name: GET_HOSTS_FROM
+                value: dns
+---
+# Source: gbchn/templates/frontenddeployables.yaml
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: gbchn-gbchn-service
+  annotations:
+    app.ibm.com/is-local-deployable: "false"
+  labels:
+    app: gbchn
+    chart: gbchn-0.1.0
+    release: gbchn
+    heritage: Tiller
+spec:
+  template:
+    kind: Service
+    apiVersion: v1
+    metadata:
+      name: gbchn-gbchn
+      labels:
+        app: gbchn
+        chart: gbchn-0.1.0
+        release: gbchn
+        heritage: Tiller
+    spec:
+      type: NodePort
+      ports:
+        - port: 80
+      selector:
+        app: gbchn
+        release: gbchn
+        tier: frontend
+---
+# Source: gbchn/templates/masterdeployables.yaml
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: gbchn-gbchn-redismasterservice
+  annotations:
+    app.ibm.com/is-local-deployable: "false"
+  labels:
+    app: gbchn
+    chart: gbchn-0.1.0
+    release: gbchn
+    heritage: Tiller
+spec:
+  template:
+    kind: Service
+    apiVersion: v1
+    metadata:
+      name: redis-master
+    spec:
+      type: ClusterIP
+      ports:
+        - port: 6379
+      selector:
+        app: gbchn
+        release: gbchn
+        role: master
+        tier: backend
+---
+# Source: gbchn/templates/masterdeployables.yaml
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: gbchn-gbchn-redismaster
+  annotations:
+    app.ibm.com/is-local-deployable: "false"
+  labels:
+    app: gbchn
+    chart: gbchn-0.1.0
+    release: gbchn
+    heritage: Tiller
+spec:
+  template:
+    kind: Deployment
+    apiVersion: apps/v1
+    metadata:
+      name: gbchn-gbchn-redismaster
+    spec:
+      selector:
+        matchLabels:
+          app: gbchn
+          release: gbchn
+          role: master
+          tier: backend
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: gbchn
+            release: gbchn
+            role: master
+            tier: backend
+        spec:
+          containers:
+            - name: redis
+              image: "gcr.io/kubernetes-e2e-test-images/redis:1.0"
+              imagePullPolicy: IfNotPresent
+              ports:
+                - containerPort: 6379
+---
+# Source: gbchn/templates/slavedeployable.yaml
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: gbchn-gbchn-redisslaveservice
+  annotations:
+    app.ibm.com/is-local-deployable: "false"
+  labels:
+    app: gbchn
+    chart: gbchn-0.1.0
+    release: gbchn
+    heritage: Tiller
+spec:
+  template:
+    kind: Service
+    apiVersion: v1
+    metadata:
+      name: redis-slave
+    spec:
+      type: ClusterIP
+      ports:
+        - port: 6379
+      selector:
+        app: gbchn
+        release: gbchn
+        role: slave
+        tier: backend
+---
+# Source: gbchn/templates/slavedeployable.yaml
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: gbchn-gbchn-redisslave
+  annotations:
+    app.ibm.com/is-local-deployable: "false"
+  labels:
+    app: gbchn
+    chart: gbchn-0.1.0
+    release: gbchn
+    heritage: Tiller
+spec:
+  template:
+    kind: Deployment
+    apiVersion: apps/v1
+    metadata:
+      name: gbchn-gbchn-redisslave
+    spec:
+      selector:
+        matchLabels:
+          app: gbchn
+          release: gbchn
+          role: slave
+          tier: backend
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: gbchn
+            release: gbchn
+            role: slave
+            tier: backend
+        spec:
+          containers:
+          - name: gbchn
+            image: "gcr.io/google_samples/gb-redisslave:v3"
+            imagePullPolicy: IfNotPresent
+            ports:
+              - containerPort: 6379
+            env:
+            - name: GET_HOSTS_FROM
+              value: dns
+helm get manifest gbchn --tls

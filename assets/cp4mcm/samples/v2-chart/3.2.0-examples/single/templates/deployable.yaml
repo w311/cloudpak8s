@@ -1,0 +1,16 @@
+apiVersion: mcm.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: {{ template "single.fullname" . }}
+  labels:
+    app: {{ template "single.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    name: {{ template "single.fullname" . }}
+spec:
+  deployer:
+    kind: helm
+    helm:
+      namespace: {{ .Values.appInClusterNamespace }}
+{{ toYaml .Values.chart | indent 6 }}

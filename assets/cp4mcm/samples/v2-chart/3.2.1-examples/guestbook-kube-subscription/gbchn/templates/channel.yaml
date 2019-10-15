@@ -1,0 +1,12 @@
+apiVersion: app.ibm.com/v1alpha1
+kind: Channel
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app: {{ template "guestbookchannel.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: Namespace
+  pathname: {{ .Release.Namespace }}

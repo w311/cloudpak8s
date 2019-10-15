@@ -1,0 +1,16 @@
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementBinding
+metadata:
+  name: default-binding-all-eks-informational
+  namespace: mcm
+placementRef:
+  name: default-placement-all-eks-informational
+subjects:
+- name: default-all-eks-informational
+  kind: Compliance
+
+
+
+
+
+              

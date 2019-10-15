@@ -1,0 +1,40 @@
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementPolicy
+metadata:
+  name: {{ template "crd-deployable.fullname" . }}
+  labels:
+    app: {{ template "crd-deployable.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    name: {{ template "crd-deployable.fullname" . }}
+spec:
+  clusterReplicas: 1
+  clusterLabels:
+    matchLabels:
+{{ toYaml .Values.placement.targetCluster.clusterLables.matchLabels | indent 6 }}
+  resourceHint:
+{{ toYaml .Values.placement.targetCluster.resourceHint | indent 4 }}
+
+---
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementBinding
+metadata:
+  name: {{ template "crd-deployable.fullname" . }}
+  labels:
+    app: {{ template "crd-deployable.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    name: {{ template "crd-deployable.fullname" . }}
+placementRef:
+  apiGroup: mcm.ibm.com
+  kind: PlacementPolicy
+  name: {{ template "crd-deployable.fullname" . }}
+subjects:
+- apiGroup: mcm.ibm.com
+  kind: Deployable
+  name: {{ template "crd-deployable.fullname" . }}-consumer
+- apiGroup: mcm.ibm.com
+  kind: Deployable
+  name: {{ template "crd-deployable.fullname" . }}-crd

@@ -1,0 +1,40 @@
+apiVersion: mcm.ibm.com/v1alpha1
+kind: ApplicationRelationship
+metadata:
+  name: {{ template "trader.name" . }}-trader
+  labels:
+    app: {{ template "trader.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    name: {{ template "trader.fullname" . }} 
+    solution: {{ template "trader.name" . }} 
+spec:
+  destination:
+    kind: Deployable
+    name: {{ template "trader.name" . }}-trader
+  source:
+    kind: Application
+    name: {{ template "trader.name" . }}
+  type: contains
+
+---
+apiVersion: mcm.ibm.com/v1alpha1
+kind: ApplicationRelationship
+metadata:
+  name: {{ template "trader.name" . }}-trader-service
+  labels:
+    app: {{ template "trader.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    name: {{ template "trader.fullname" . }} 
+    solution: {{ template "trader.name" . }} 
+spec:
+  destination:
+    kind: Deployable
+    name: {{ template "trader.name" . }}-trader-service
+  source:
+    kind: Application
+    name: {{ template "trader.fullname" . }}
+  type: contains

@@ -1,0 +1,51 @@
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementBinding
+metadata:
+  labels:
+    app: {{ template "qodapp.fullname" . }}
+    name: {{ template "qodapp.fullname" . }}
+    placementPolicy: {{ template "qodapp.fullname" . }}-apiplacementbinding
+  name: {{ template "qodapp.fullname" . }}-apiplacementbinding
+placementRef:
+  apiGroup: mcm.ibm.com
+  kind: PlacementPolicy
+  name: {{ template "qodapp.fullname" . }}-api
+subjects:
+- apiGroup: mcm.ibm.com
+  kind: Deployable
+  name: {{ template "qodapp.fullname" . }}-api
+---
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementBinding
+metadata:
+  labels:
+    app: {{ template "qodapp.fullname" . }}
+    name: {{ template "qodapp.fullname" . }}
+    placementPolicy: {{ template "qodapp.fullname" . }}-webplacementbinding
+  name: {{ template "qodapp.fullname" . }}-webplacementbinding
+placementRef:
+  apiGroup: mcm.ibm.com
+  kind: PlacementPolicy
+  name: {{ template "qodapp.fullname" . }}-web
+subjects:
+- apiGroup: mcm.ibm.com
+  kind: Deployable
+  name: {{ template "qodapp.fullname" . }}-web
+---
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementBinding
+metadata:
+  labels:
+    app: {{ template "qodapp.fullname" . }}
+    name: {{ template "qodapp.fullname" . }}
+    placementPolicy: {{ template "qodapp.fullname" . }}-dbplacementbinding
+  name: {{ template "qodapp.fullname" . }}-dbplacementbinding
+placementRef:
+  apiGroup: mcm.ibm.com
+  kind: PlacementPolicy
+  name: {{ template "qodapp.fullname" . }}-db
+subjects:
+- apiGroup: mcm.ibm.com
+  kind: Deployable
+  name: {{ template "qodapp.fullname" . }}-db
+---

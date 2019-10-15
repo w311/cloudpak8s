@@ -1,0 +1,12 @@
+apiVersion: app.ibm.com/v1alpha1
+kind: Channel
+metadata:
+  name: qotdchn
+  namespace: entitlement
+spec:
+  type: HelmRepo
+  pathname: https://icp-console.mcmresidency1-6550a99fb8cff23207ccecc2183787a9-0001.us-east.containers.appdomain.cloud:443/helm-repo/charts
+  configRef:
+    name: repo-config
+  secretRef:
+    name: repo-secret

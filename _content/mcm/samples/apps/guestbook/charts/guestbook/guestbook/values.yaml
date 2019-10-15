@@ -1,0 +1,12 @@
+replicaCount: 1
+
+appInClusterNamespace: default
+
+targetCluster:
+  labelSelector:
+    matchLabels:
+      environment: Dev
+      datacenter: oregon
+  resourceSelector:
+    type: cpu
+  compliances: ""

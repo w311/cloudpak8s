@@ -1,0 +1,71 @@
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: {{ template "guestbookchannel.fullname" . }}-frontend
+  annotations:
+    app.ibm.com/is-local-deployable: "false"
+  labels:
+    app: {{ template "guestbookchannel.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  template:
+    kind: Deployment
+    apiVersion: apps/v1
+    metadata:
+      name: {{ template "guestbookchannel.fullname" . }}-frontend
+    spec:
+      selector:
+        matchLabels:
+          app: {{ template "guestbookchannel.name" . }}
+          release: {{ .Release.Name }}
+          tier: frontend
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: {{ template "guestbookchannel.name" . }}
+            release: {{ .Release.Name }}
+            tier: frontend
+        spec:
+          containers:
+            - name: frontend
+              image: "{{ .Values.frontend.deployment.repository }}:{{ .Values.frontend.deployment.tag }}"
+              imagePullPolicy: {{ .Values.frontend.deployment.pullPolicy }}
+              ports:
+                - containerPort: 80
+              env:
+              - name: GET_HOSTS_FROM
+                value: dns
+---
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: {{ template "guestbookchannel.fullname" . }}-service
+  annotations:
+    app.ibm.com/is-local-deployable: "false"
+  labels:
+    app: {{ template "guestbookchannel.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  template:
+    kind: Service
+    apiVersion: v1
+    metadata:
+      name: {{ template "guestbookchannel.fullname" . }}
+      labels:
+        app: {{ template "guestbookchannel.name" . }}
+        chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
+    spec:
+      type: {{ .Values.frontend.service.type }}
+      ports:
+        - port: 80
+      selector:
+        app: {{ template "guestbookchannel.name" . }}
+        release: {{ .Release.Name }}
+        tier: frontend

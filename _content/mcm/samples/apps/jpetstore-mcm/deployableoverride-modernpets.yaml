@@ -1,0 +1,36 @@
+apiVersion: mcm.ibm.com/v1alpha1
+kind: DeployableOverride
+metadata:
+  name: modernpets
+  namespace: default
+  labels:
+    name: jpetstore
+    app: jpetstore
+    serviceKind: ApplicationService
+spec:
+  overrides:
+  - clusterName: iks
+    template:
+        deployer:
+          kind: helm
+          helm:
+            #repository: production-repo
+            #chartName: app-chart
+            chartURL: https://raw.githubusercontent.com/cae-ibm/jpetstore-kubernetes/master/helm/modernpets-rhos-0.1.5.tgz
+            #hartName: mmssearch
+            version: 0.1.5
+            namespace: default
+            values: IyBEZWZhdWx0IHZhbHVlcyBmb3IgbW9kZXJucGV0cy4KIyBUaGlzIGlzIGEgWUFNTC1mb3JtYXR0ZWQgZmlsZS4KIyBEZWNsYXJlIHZhcmlhYmxlcyB0byBiZSBwYXNzZWQgaW50byB5b3VyIHRlbXBsYXRlcy4KCnJlcGxpY2FDb3VudDogMgoKaW1hZ2U6CiAgcmVwb3NpdG9yeTogb2xpdmVyaWJtICAjIDxSRUdJU1RSWT4vPE5BTUVTUEFDRT4gIyBFeDogdXMuaWNyLmlvL215bmFtZXNwYWNlCiAgcHVsbFBvbGljeTogQWx3YXlzCiAgcHVsbFNlY3JldDogIiIKCmluZ3Jlc3M6CiAgZW5hYmxlZDogdHJ1ZQogIGhvc3RzOgogICAgLSBqcGV0c3RvcmUuMTYxLjE1Ni45OS4xNzQubmlwLmlvICMgIDxJbmdyZXNzIFN1YmRvbWFpbj4gIyBFeDoganBldHN0b3JlLm15Y2x1c3Rlcm5hbWUudXMtc291dGguY29udGFpbmVycy5teWJsdWVtaXgubmV0Cg==
+  - clusterName: rhos
+    template:
+        deployer:
+          kind: helm
+          helm:
+            chartURL: https://raw.githubusercontent.com/cae-ibm/jpetstore-kubernetes/master/helm/modernpets-rhos-0.1.5.tgz
+            #chartURL: https://ocpmaster1:5443/helm-repo/requiredAssets/modernpets-0.1.5.tgz
+            #chartName: modernpets
+            version: 0.1.5
+            namespace: default
+            # values: {"image.repository" : "docker-registry.default.svc:5000/default", "ingress.hosts": [ "jpetstore.10.134.214.140.nip.io" ] }
+            # values: {"image.repository" : "oliveribm", "ingress.hosts.0":  "jpetstore.10.134.214.140.nip.io"  }
+            values: IyBEZWZhdWx0IHZhbHVlcyBmb3IgbW9kZXJucGV0cy4KIyBUaGlzIGlzIGEgWUFNTC1mb3JtYXR0ZWQgZmlsZS4KIyBEZWNsYXJlIHZhcmlhYmxlcyB0byBiZSBwYXNzZWQgaW50byB5b3VyIHRlbXBsYXRlcy4KCnJlcGxpY2FDb3VudDogMgoKaW1hZ2U6CiAgcmVwb3NpdG9yeTogb2xpdmVyaWJtICAjIDxSRUdJU1RSWT4vPE5BTUVTUEFDRT4gIyBFeDogdXMuaWNyLmlvL215bmFtZXNwYWNlCiAgcHVsbFBvbGljeTogQWx3YXlzCiAgcHVsbFNlY3JldDogIiIKCmluZ3Jlc3M6CiAgZW5hYmxlZDogdHJ1ZQogIGhvc3RzOgogICAgLSBqcGV0c3RvcmUuMTAuMTM0LjIxNC4xNDAubmlwLmlvICMgIDxJbmdyZXNzIFN1YmRvbWFpbj4gIyBFeDoganBldHN0b3JlLm15Y2x1c3Rlcm5hbWUudXMtc291dGguY29udGFpbmVycy5teWJsdWVtaXgubmV0Cg==

@@ -1,0 +1,229 @@
+
+---
+# Source: guestbook/templates/application.yaml
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: guestbook101-gbapp
+  labels:
+    app: "gbapp"
+    chart: guestbook-0.1.0
+    release: guestbook101
+    heritage: Tiller
+    name: guestbook101-gbapp
+spec:
+  selector:
+    matchExpressions:
+    - key: app
+      operator: In
+      values:
+      - guestbook
+      - gbf
+      - gbrm
+      - gbrs
+  componentKinds:
+  - group: core
+    kind: Pods
+---
+# Source: guestbook/templates/appfrontrel.yaml
+apiVersion: mcm.ibm.com/v1alpha1
+kind: ApplicationRelationship
+metadata:
+  name: guestbook101-gbapp-appfrontend
+  labels:
+    app: "gbapp"
+    chart: guestbook-0.1.0
+    release: guestbook101
+    heritage: Tiller
+spec:
+  destination:
+    kind: Deployable
+    name: guestbook101-gbapp
+  source:
+    kind: Application
+    name: guestbook101-gbapp
+  type: contains
+---
+# Source: guestbook/templates/appmasterrel.yaml
+apiVersion: mcm.ibm.com/v1alpha1
+kind: ApplicationRelationship
+metadata:
+  name: guestbook101-gbapp-appmaster
+  labels:
+    app: "gbapp"
+    chart: guestbook-0.1.0
+    release: guestbook101
+    heritage: Tiller
+spec:
+  destination:
+    kind: Deployable
+    name: guestbook101-gbapp-redismaster
+  source:
+    kind: Application
+    name: guestbook101-gbapp
+  type: contains
+---
+# Source: guestbook/templates/slaverelationship.yaml
+apiVersion: mcm.ibm.com/v1alpha1
+kind: ApplicationRelationship
+metadata:
+  name: guestbook101-gbapp-slave
+  labels:
+    app: "gbapp"
+    chart: guestbook-0.1.0
+    release: guestbook101
+    heritage: Tiller
+spec:
+  destination:
+    kind: Deployable
+    name: guestbook101-gbapp-redisslave
+  source:
+    kind: Deployable
+    name: guestbook101-gbapp
+  type: usesCreated
+---
+# Source: guestbook/templates/frontenddeployable.yaml
+apiVersion: mcm.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: guestbook101-gbapp
+  labels:
+    app: "gbapp"
+    chart: guestbook-0.1.0
+    release: guestbook101
+    heritage: Tiller
+    name: guestbook101-gbapp
+    servicekind: ApplicationService
+spec:
+  deployer:
+    kind: helm
+    helm:
+      chartURL: https://raw.githubusercontent.com/abdasgupta/helm-repo/master/3.1-mcm-guestbook/gbf-0.1.0.tgz
+      namespace: default
+---
+# Source: guestbook/templates/masterdeployable.yaml
+apiVersion: mcm.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: guestbook101-gbapp-redismaster
+  labels:
+    app: "gbapp"
+    chart: guestbook-0.1.0
+    release: guestbook101
+    heritage: Tiller
+    name: guestbook101-gbapp-redismaster
+    servicekind: CacheService
+spec:
+  deployer:
+    kind: helm
+    helm:
+      chartURL: https://raw.githubusercontent.com/abdasgupta/helm-repo/master/3.1-mcm-guestbook/gbrm-0.1.0.tgz
+      namespace: default
+---
+# Source: guestbook/templates/slavedeployable.yaml
+apiVersion: mcm.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: guestbook101-gbapp-redisslave
+  labels:
+    app: "gbapp"
+    chart: guestbook-0.1.0
+    release: guestbook101
+    heritage: Tiller
+    name: guestbook101-gbapp-redisslave
+    servicekind: CacheService
+spec:
+  deployer:
+    kind: helm
+    helm:
+      chartURL: https://raw.githubusercontent.com/abdasgupta/helm-repo/master/3.1-mcm-guestbook/gbrs-0.1.0.tgz
+      namespace: default
+---
+# Source: guestbook/templates/placementbinding.yaml
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementBinding
+metadata:
+  name: guestbook101-gbapp
+  labels:
+    app: "gbapp"
+    chart: guestbook-0.1.0
+    release: guestbook101
+    heritage: Tiller
+    name: guestbook101-gbapp
+    servicekind: CacheService
+placementRef:
+  apiGroup: mcm.ibm.com
+  kind: PlacementPolicy
+  name: guestbook101-gbapp
+subjects:
+- apiGroup: mcm.ibm.com
+  kind: Deployable
+  name: guestbook101-gbapp
+---
+# Source: guestbook/templates/placementbinding.yaml
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementBinding
+metadata:
+  name: guestbook101-gbapp-redismaster
+  labels:
+    app: "gbapp"
+    chart: guestbook-0.1.0
+    release: guestbook101
+    heritage: Tiller
+    name: guestbook101-gbapp
+    servicekind: CacheService
+placementRef:
+  apiGroup: mcm.ibm.com
+  kind: PlacementPolicy
+  name: guestbook101-gbapp-redismaster
+subjects:
+- apiGroup: mcm.ibm.com
+  kind: Deployable
+  name: guestbook101-gbapp-redismaster
+---
+# Source: guestbook/templates/placement.yaml
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementPolicy
+metadata:
+  name: guestbook101-gbapp
+  labels:
+    app: "gbapp"
+    chart: guestbook-0.1.0
+    release: guestbook101
+    heritage: Tiller
+    name: guestbook101-gbapp
+    servicekind: CacheService
+spec:
+  clusterReplicas: 1
+  clusterLabels:
+    matchLabels:
+      datacenter: oregon
+      environment: Dev
+      
+  resourceHint:
+    type: cpu
+    
+  compliances:
+---
+# Source: guestbook/templates/placement.yaml
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementPolicy
+metadata:
+  name: guestbook101-gbapp-redismaster
+  labels:
+    app: "gbapp"
+    chart: guestbook-0.1.0
+    release: guestbook101
+    heritage: Tiller
+    name: guestbook101-gbapp-redismaster
+    servicekind: CacheService
+spec:
+  clusterReplicas: 1
+  clusterLabels:
+    matchLabels:
+      datacenter: oregon
+      environment: Dev
+      
+  resourceHint:
+    type: cpu
+helm get manifest guestbook101 --tls

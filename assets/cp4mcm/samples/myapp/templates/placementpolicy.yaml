@@ -1,0 +1,51 @@
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementPolicy
+metadata:
+  name: {{ template "qodapp.fullname" . }}-api
+  labels:
+    app: {{ template "qodapp.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    name: {{ template "qodapp.fullname" . }}-api
+    servicekind: CacheService
+spec:
+  clusterReplicas: {{ .Values.replicaCount }}
+  clusterSelector:
+    matchLabels:
+      name: {{ .Values.targetCluster.apidatacenter }}
+---
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementPolicy
+metadata:
+  name: {{ template "qodapp.fullname" . }}-web
+  labels:
+    app: {{ template "qodapp.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    name: {{ template "qodapp.fullname" . }}-web
+    servicekind: CacheService
+spec:
+  clusterReplicas: {{ .Values.replicaCount }}
+  clusterSelector:
+    matchLabels:
+      name: {{ .Values.targetCluster.webdatacenter }}
+---
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementPolicy
+metadata:
+  name: {{ template "qodapp.fullname" . }}-db
+  labels:
+    app: {{ template "qodapp.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    name: {{ template "qodapp.fullname" . }}-db
+    servicekind: CacheService
+spec:
+  clusterReplicas: {{ .Values.replicaCount }}
+  clusterSelector:
+    matchLabels:
+      name: {{ .Values.targetCluster.dbdatacenter }}
+---

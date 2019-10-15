@@ -1,0 +1,32 @@
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: {{ template "trader.fullname" . }}
+  labels:
+    app: {{ template "trader.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    name: {{ template "trader.fullname" . }} 
+    solution: {{ template "trader.name" . }}   
+spec:
+  selector:
+    matchLabels:
+    - solution: {{ template "trader.name" . }}
+    - key: solution
+      operator: In
+      values:
+      - {{ template "trader.name" . }}
+  componentKinds:
+    - group: core
+      kind: Pods     
+    - group: deployments
+      kind: Deployment
+    - group: TWAS
+      kind: WebSphere-Traditional
+    - group: Liberty
+      kind: WebSphere-Liberty
+    - group: ingress
+      kind: Ingress
+    - group: service
+      kind: Service

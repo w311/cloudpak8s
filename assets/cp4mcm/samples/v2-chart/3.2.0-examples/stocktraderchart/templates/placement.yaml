@@ -1,0 +1,20 @@
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementPolicy
+metadata:
+  name: {{ template "trader.fullname" . }}
+  labels:
+    app: {{ template "trader.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    name: {{ template "trader.fullname" . }}
+    servicekind: CacheService
+    solution: {{ template "trader.name" . }}
+spec:
+  clusterReplicas: {{ .Values.clusterReplicas }}
+  clusterLabels:
+    matchLabels: 
+{{ toYaml .Values.targetCluster.labelSelector.matchLabels | indent 6 }}
+  resourceHint: 
+{{ toYaml .Values.targetCluster.labelSelector.resourceHint | indent 4 }}
+  compliances: {{ .Values.targetCluster.compliances }}

@@ -1,0 +1,75 @@
+apiVersion: mcm.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: {{ template "guestbookapplication.fullname" . }}-frontend
+  labels:
+    app: {{ template "guestbookapplication.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    name: {{ template "guestbookapplication.fullname" . }}-frontend
+    servicekind: ApplicationService
+spec:
+  deployer:
+    kind: Deployment
+    kube:
+      namespace: {{ .Values.appInClusterNamespace }}
+      template:
+        metadata:
+          name: {{ template "guestbookapplication.fullname" . }}-frontend
+        spec:
+          selector:
+            matchLabels:
+              app: {{ template "guestbookapplication.name" . }}
+              release: {{ .Release.Name }}
+              tier: frontend
+          replicas: {{ .Values.frontend.replicaCount }}
+          template:
+            metadata:
+              labels:
+                app: {{ template "guestbookapplication.name" . }}
+                release: {{ .Release.Name }}
+                tier: frontend
+            spec:
+              containers:
+                - name: {{ .Chart.Name }}
+                  image: "{{ .Values.frontend.repository }}:{{ .Values.frontend.tag }}"
+                  imagePullPolicy: {{ .Values.frontend.pullPolicy }}
+                  ports:
+                    - containerPort: 80
+                  env:
+                  - name: GET_HOSTS_FROM
+                    value: dns
+---
+apiVersion: mcm.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: {{ template "guestbookapplication.fullname" . }}-service
+  labels:
+    app: {{ template "guestbookapplication.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    name: {{ template "guestbookapplication.fullname" . }}-service
+    servicekind: ApplicationService
+spec:
+  deployer:
+    kind: Service
+    kube:
+      namespace: {{ .Values.appInClusterNamespace }}
+      template:
+        metadata:
+          name: {{ template "guestbookapplication.fullname" . }}
+          labels:
+            app: {{ template "guestbookapplication.name" . }}
+            chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+            release: {{ .Release.Name }}
+            heritage: {{ .Release.Service }}
+        spec:
+          type: {{ .Values.frontend.service.type }}
+          ports:
+            - port: 80
+          selector:
+            app: {{ template "guestbookapplication.name" . }}
+            release: {{ .Release.Name }}
+            tier: frontend

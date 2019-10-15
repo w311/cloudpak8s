@@ -1,0 +1,91 @@
+# Create a Namespace to hold the Channel "dev"
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: watson-cloudpak-channel
+spec:
+---
+# Create a Channel that declares resources that can be deployed
+# Channel can be a Namespace, Object Store Bucket, or Helm Repo
+apiVersion: app.ibm.com/v1alpha1
+kind: Channel
+metadata:
+  name: dev
+  namespace: watson-cloudpak-channel
+spec:
+  type: Namespace
+  pathname: watson-cloudpak-channel
+---
+# Deployables provide a reference to an Object that can be 
+# deployed (either embedded or referenced via Helm Chart)
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  annotations:
+    app.ibm.com/is-local-deployable: "false"
+  name: watson-conv
+  namespace: watson-cloudpak-channel
+spec:
+  template:
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: watson-conv
+      labels:
+        app: watson-conv
+    spec:
+      replicas: 2 # tells deployment to run 2 pods matching the template
+      selector:
+        matchLabels:
+          app: watson-conv
+          tier: frontend
+      template: # create pods using pod definition in this template
+        metadata:
+          labels:
+            app: watson-conv
+            tier: frontend
+        spec:
+          containers:
+          - name: watson-conv
+            image: docker.io/mdelder/watson-conversation-app:latest
+            resources:
+              requests:
+                cpu: 500m
+                memory: 100Mi
+            env:
+              - name: WORKSPACE_ID
+                valueFrom:
+                  configMapKeyRef:
+                    name: car-dashboard-config
+                    key: workspace_id
+              - name: CONVERSATION_SERVICE_CAR
+                valueFrom:
+                  secretKeyRef:
+                    name: binding-conversation-service-car
+                    key: binding
+---
+# Deployables provide a reference to an Object that can be 
+# deployed (either embedded or referenced via Helm Chart)
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  annotations:
+    app.ibm.com/is-local-deployable: "false"
+  name: watson-api
+  namespace: watson-cloudpak-channel
+spec:
+  template:
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: watson-conv
+      labels:
+        app: watson-conv
+        tier: frontend
+    spec:
+      type: NodePort
+      ports:
+      - port: 3000
+      selector:
+        app: watson-conv
+        tier: frontend

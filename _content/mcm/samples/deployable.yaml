@@ -1,0 +1,18 @@
+apiVersion: mcm.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: {{ template "mq.fullname" . }}-server
+  labels:
+    app: {{ template "mq.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    name: {{ template "mq.fullname" . }}-server
+    servicekind: CacheService
+spec:
+  deployer:
+    kind: helm
+    helm:
+      chartURL: https://raw.githubusercontent.com/rhine59/helm-repo/master/ibm-mqadvanced-server-dev-3.0.1.tgz
+      valuesURL: https://raw.githubusercontent.com/rhine59/helm-repo/master/values.yaml
+      namespace: mq

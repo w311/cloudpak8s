@@ -1,0 +1,257 @@
+---
+title: Modernize existing applications
+weight: 500
+---
+
+## Introduction 
+
+On the journey to cloud, enterprise customers are facing challenges moving their existing on-premises applications to cloud quickly and cost-effectively.  
+
+The IBM Cloud Pak for Applications provides a complete and consistent experience and solution to modernize enterprise applications for cloud-native deployments. Customers can easily modernize their existing applications with IBM’s integrated tools and develop new cloud-native applications faster for deployment on any cloud.  
+
+One of the tools included in the Pak is the IBM Cloud Transformation Advisor (TA), a developer tool that is available at no charge to help you quickly evaluate on-premises Java EE applications for deployment to the cloud. 
+
+The Transformation Advisor tool can:
+
+- identify the Java EE programming models in the app.
+- determine the complexity of apps by listing a high-level inventory of the content and structure of each app.
+- highlight Java EE programming model and WebSphere API differences between the WebSphere profile types
+- gain insights into Java EE specification implementation differences that might affect the application. 
+ 
+
+Additionally, the tool provides a recommendation for the right-fit IBM WebSphere Application Server edition and offers advice, best practices and potential solutions to assess the ease of moving apps to Liberty or to newer versions of WebSphere traditional. 
+
+It helps accelerate application migrating to cloud, while minimizing errors and risks.
+
+## Transformation Advisor Migration Plan
+
+Once you have decided on an application you would like to migrate, you will work with the Migration Plan. 
+
+ Using the TA migration plan, TA automatically generates the artifacts you will need to containerize your application running on WebSphere Liberty and deploy to containers on Redhat OpenShift. 
+ 
+ You will have the opportunity on this page to upload your application binaries and any external drivers that TA detected that you may need. 
+ 
+ After the migration bundle is prepared, you have options either to push the bundle to a GitHub repository or download them in a single zip to do more changes and to deploy the bundle manually. 
+ 
+ A pdf document is included in the migration bundle that provides detailed instructions on the next steps you need to take to migrate the application. Those steps are highlighted in the next section of this document. 
+
+If you download the migration bundle to your local machine and modify the generated artifacts to suite your environment and specific application requirements, you can follow the steps in the next section to migrate / modernize the application to containers on Liberty runtime with Redhat OpenShift. 
+
+## Migration Steps - Overview
+
+This document describes how to use the migration artifacts produced by IBM Cloud Transformation Advisor to migrate your Java applications to Liberty on Cloud Pak for Apps on Red Hat OpenShift.
+You will complete the following steps:
+1. Containerize the Liberty instance running the application
+
+    - You create a docker image of your working application running in the correctly configured Liberty instance.
+
+2. Deploy application to Cloud Pak for Apps on Red Hat OpenShift
+
+    - Tag and add the image to the Red Hat OpenShift image repository and create a running instance of your application.
+
+3. Cleanup (Optional) 
+
+
+Variable definitions for tasks in this document:
+
+- `<APP_CONTEXT_ROOT>`is the context root for your application. If not defined
+elsewhere, for example in ibm-web-ext-xml, this corresponds to the "name" attribute in
+the <application> element of the server.xml.
+- `<APPLICATION_NAME>` is the name of the application.
+- `<CONTAINER_ID>` is the container ID for your docker image. To get this value, enter:
+
+```
+docker ps
+```
+
+- `<IMAGE_NAME>` is the name you will use for this image, typically the name of the application.
+- `<LIBERTY_HOME>` is the location where you have installed Liberty.
+- `<LIBERTY_MACHINE>` is the machine where you have installed the Liberty profile.
+- `<MIGRATION_ARTIFACTS_HOME>` is the location where you have unzipped the Transformation Advisor artifacts, or cloned the repository.
+- `<OCP_PROJECT>` is the name of the OpenShift project where you want to install the
+application.
+
+## Containerize Liberty
+
+In this Step you will containerize your working Liberty installation. You will create a Liberty image that has your migrated application installed and working, and then test the image to confirm that it is operating correctly
+
+Prerequisites:
+- Docker is installed. (You can download from: [https://www.docker.com/get-started](https://www.docker.com/get-started).
+- The machine where you complete this task requires access to the internet to download
+the Liberty base image.
+- Access to either a public or private Red Hat OpenShift environment
+
+NOTE: The migration artifacts generated by Transformation Advisor (specifically the
+operator/application/application-cr.yaml file) assume that the default Docker Registry is being used. If you choose to use a different registry, remember to update the image property in the YAML file appropriately.
+
+If you are using the OpenShift cluster private registry, you will need to complete the
+following:
+- Consult the Red Hat OpenShift documentation to configure OpenShift's Docker Registry to be externally accessible. Once configured, you can push your image from the location where you built it in the previous step. 
+- Ensure the docker service is running. If it's not, start it:
+
+```
+service docker start
+```
+
+Go to where your migration artifacts are located and build your image from the docker file:
+
+```
+cd <MIGRATION_ARTIFACTS_HOME>
+docker build --no-cache -t "<IMAGE_NAME>:latest" .
+```
+The base Liberty image will be pulled down and used to create the image that includes your  migrated application. Run the image and confirm that it is working correctly:
+
+```
+docker run -p 9080:9080 <IMAGE_NAME>:latest
+```
+If everything looks good, the image has been started and mapped to the port 9080. You can access it from your browser with this link: http://<LIBERTY_HOME_MACHINE_IP>:9080/<APP_CONTEXT_ROOT>
+
+Optional: Check your image when it is up and running by logging into the container:
+```
+docker exec -ti <CONTAINER_ID> bash
+```
+
+This allows you to browse the file system of the container where your application is running.
+
+## Deploy your application to Cloud Pak for Apps on Red Hat OpenShift
+
+In this step you will deploy the docker image you have created to Red Hat OpenShift and create an instance of it.
+
+
+IMPORTANT: The YAML file generated by Transformation Advisor assumes that the OpenShift project name is the same as the <APPLICATION_NAME>. 
+
+If you choose another project name, you must update the <MIGRATION_ARTIFACTS_HOME>/operator/application/application.cr.yaml file to change the repository name for the image location to match your chosen project name:
+
+ **Note:** When logging into and accessing the OpenShift Docker Registry locally from the Cluster, you can specify the registry as:
+
+   ```
+   <DOCKER_REGISTRY> = docker-registry.default.svc:5000
+   ```
+
+However, if remotely logging in and accessing the OpenShift Docker Registry, you must use the Exposed Route for the docker registry, for example:
+
+   ```
+    <DOCKER_REGISTRY> = docker-registry-default.apps.icp4app.xxx.xxx.xxx.xxx.nip.io
+   ```
+
+To get the **exposed route** for the docker registry, run the following command in the OpenShift Cluster:
+
+  ```
+   oc get services -n default | grep docker-registry
+   oc get routes -n default | grep docker-registry
+  ```
+
+Log in to the OpenShift cluster and create a new project in OpenShift.
+
+   ```
+    oc login -u <USER_NAME>
+    oc new-project <OCP_PROJECT>
+   ```
+
+Tag your image appropriately. Ensure that your OpenShift project (namespace) is included:
+
+   ```
+    docker tag <IMAGE_NAME>:latest <DOCKER_REGISTRY>/<OCP_PROJECT>/<IMAGE_NAME>:latest
+   ```
+
+Login to docker registry:
+   
+   ```
+    docker login -u $(oc whoami) -p $(oc whoami -t) <DOCKER_REGISTRY>
+   ```
+
+Push the image to the registry:
+
+   ```
+    docker push <DOCKER_REGISTRY>/<OCP_PROJECT>/<IMAGE_NAME>:latest
+   ```
+
+Optional: To do a quick deploy and test of the image, you can deploy using the OpenShift UI. Consult the Open Shift documentation for more details: [https://docs.openshift.com/containerplatform/3.11/welcome/index.html](https://docs.openshift.com/containerplatform/3.11/welcome/index.html)
+
+**Recommended** Deploy your image with its accompanying operator using the following instructions:
+
+Change to the operator directory in the `<MIGRATION_ARTIFACTS_HOME>`
+
+   ```
+    cd <MIGRATION_ARTIFACTS_HOME>/operator
+   ````
+
+Create the custom resource definition (CRD) for your Liberty application using the provided artifact:
+
+   ```
+    oc apply -f application/application-crd.yaml
+  ```
+
+The Liberty operator requires the ServiceAccount, Role, and RoleBinding Kubernetes resources to be created. Run the following commands to create them:
+
+   ```
+    oc apply -f deploy/service_account.yaml
+    oc apply -f deploy/role.yaml
+    oc apply -f deploy/role_binding.yaml
+   ```
+Create an instance of the Liberty operator:
+
+   ```
+    oc apply -f deploy/operator.yaml
+   ```
+
+**IMPORTANT:** Wait for the Liberty operator installation to complete before going to the next step. You can check the status using oc get pods and wait until the `<APPLICATION_NAME>-operator` pod is ready.
+
+Deploy your microservice application using the provided custom resource artifact. If you have chosen a project name other than the application name, review the beginning of this Step before you run this command:
+
+   ```
+    oc apply -f application/application-cr.yaml
+   ```
+
+You can view the status of your deployment by running oc get deployments. If you don't see the status after a few minutes, query the pods and then fetch the Liberty pod logs:
+
+   ```
+    oc get pods
+    oc logs <pod>
+   ```
+Access the application using the NodePort service. Run the following command to get the service port:
+
+   ```
+    oc get service <APPLICATION_NAME> -o=jsonpath='{.spec.ports[0].nodePort}'
+  ```
+
+Now, from your browser, go to `https://<openshift accessible domain>:<service_port>/<CONTEXT_ROOT>`.
+
+### Cleanup
+
+Optional: If you wish to delete your application from OpenShift, run the commands described here. Only delete the CRD if it is not being used by other applications. If you have not deployed anything else to the project, you can run the following to delete all resources in the project:
+
+```
+oc -n <OCP_PROJECT> delete all --all
+```
+
+If you have other resources in the project run the oc get all to see all the resources and remove only the resources particular to the application. Such resources can be readily identified with the <APPLICATION-NAME>
+In addition you need to run the following commands:
+
+```
+oc -n <OCP_PROJECT> delete role <APPLICATION-NAME>-operator
+
+oc -n <OCP_PROJECT> delete rolebinding <APPLICATION-NAME>-operator
+
+oc -n <OCP_PROJECT> delete serviceaccount <APPLICATION-NAME>-operator
+
+oc delete OpenLiberty/<APPLICATION_NAME>
+```
+If it's not working run the following command and delete again
+```
+kubectl patch OpenLiberty/<APPLICATION_NAME> -p '{"metadata":{"finalizers":[]}}' --type=merge
+```
+Only delete the CRD if it is not being used by other applications
+```
+oc delete crd/openliberties.openliberty.io
+```
+If it's not working do this and delete again
+```
+kubectl patch crd/openliberties.openliberty.io -p '{"metadata":{"finalizers":[]}}' --type=merge
+```
+### References
+
+[IBM Cloud Architeture - Application Modernization Examples](https://github.com/ibm-cloud-architecture/cloudpak-for-applications)
+- [Application Modernization](https://github.com/ibm-cloud-architecture/cloudpak-for-applications/tree/liberty)
+- [Operational Modernization](https://github.com/ibm-cloud-architecture/cloudpak-for-applications/tree/was90)
+- [Spring Modernization](https://github.com/ibm-cloud-architecture/cloudpak-for-applications/tree/spring)

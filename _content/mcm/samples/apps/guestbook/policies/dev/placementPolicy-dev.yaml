@@ -1,0 +1,10 @@
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementPolicy
+metadata:
+  name: default-placement-dev
+  namespace: mcm
+spec:
+  clusterLabels:
+    matchLabels:
+      environment: Dev
+              

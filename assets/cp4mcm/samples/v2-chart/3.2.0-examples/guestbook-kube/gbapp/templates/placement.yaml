@@ -1,0 +1,39 @@
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementPolicy
+metadata:
+  name: {{ template "guestbookapplication.fullname" . }}
+  labels:
+    app: {{ template "guestbookapplication.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    name: {{ template "guestbookapplication.fullname" . }}
+    servicekind: CacheService
+spec:
+  clusterReplicas: {{ .Values.clusterReplicas }}
+  clusterLabels:
+    matchLabels:
+{{ toYaml .Values.frontend.targetCluster.clusterLables.matchLabels | indent 6 }}
+  resourceHint:
+{{ toYaml .Values.frontend.targetCluster.resourceHint | indent 4 }}
+  compliances: {{ .Values.frontend.targetCluster.compliances }}
+---
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementPolicy
+metadata:
+  name: {{ template "guestbookapplication.fullname" . }}-redismaster
+  labels:
+    app: {{ template "guestbookapplication.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    name: {{ template "guestbookapplication.fullname" . }}-redismaster
+    servicekind: CacheService
+spec:
+  clusterReplicas: {{ .Values.clusterReplicas }}
+  clusterLabels:
+    matchLabels:
+{{ toYaml .Values.redismaster.targetCluster.clusterLables.matchLabels | indent 6 }}
+  resourceHint:
+{{ toYaml .Values.redismaster.targetCluster.resourceHint | indent 4 }}
+  compliances: {{ .Values.redismaster.targetCluster.compliances }}

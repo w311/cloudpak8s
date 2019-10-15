@@ -1,0 +1,18 @@
+apiVersion: mcm.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: {{ template "petstore.fullname" . }}-mmssearch
+  labels:
+    app: {{ template "petstore.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    name: {{ template "petstore.fullname" . }}-mmssearch
+    servicekind: CacheService
+spec:
+  deployer:
+    kind: helm
+    helm:
+      chartURL: https://raw.githubusercontent.com/rhine59/helm-repo/master/3.1-mcm-petstore/mmssearch-0.1.0.tgz
+      chartURL: https://raw.githubusercontent.com/abdasgupta/helm-repo/master/3.1-mcm-guestbook/gbrs-0.1.0.tgz
+      namespace: {{ .Values.appInClusterNamespace }}

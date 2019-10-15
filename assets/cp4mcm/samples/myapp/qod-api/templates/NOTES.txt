@@ -1,0 +1,3 @@
+Quote of the Day API tier.
+
+Depends on qod-db.

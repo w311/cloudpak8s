@@ -1,0 +1,35 @@
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementPolicy
+metadata:
+  name: {{ template "single.fullname" . }}
+  labels:
+    app: {{ template "single.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    name: {{ template "single.fullname" . }}
+spec:
+  clusterReplicas: {{ .Values.replicaCount }}  
+  clusterLabels:
+    matchLabels:
+{{ toYaml .Values.targetCluster.labelSelector.matchLabels | indent 6 }}
+
+---
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementBinding
+metadata:
+  name: {{ template "single.fullname" . }}
+  labels:
+    app: {{ template "single.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    name: {{ template "single.fullname" . }}
+placementRef:
+  apiGroup: mcm.ibm.com
+  kind: PlacementPolicy
+  name: {{ template "single.fullname" . }}
+subjects:
+- apiGroup: mcm.ibm.com
+  kind: Deployable
+  name: {{ template "single.fullname" . }}

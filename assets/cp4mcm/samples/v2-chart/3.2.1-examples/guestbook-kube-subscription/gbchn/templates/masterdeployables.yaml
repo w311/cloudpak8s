@@ -1,0 +1,66 @@
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: {{ template "guestbookchannel.fullname" . }}-redismaster
+  annotations:
+    app.ibm.com/is-local-deployable: "false"
+  labels:
+    app: {{ template "guestbookchannel.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  template:
+    kind: Deployment
+    apiVersion: apps/v1
+    metadata:
+      name: {{ template "guestbookchannel.fullname" . }}-redismaster
+    spec:
+      selector:
+        matchLabels:
+          app: {{ template "guestbookchannel.name" . }}
+          release: {{ .Release.Name }}
+          role: master
+          tier: backend
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            app: {{ template "guestbookchannel.name" . }}
+            release: {{ .Release.Name }}
+            role: master
+            tier: backend
+        spec:
+          containers:
+            - name: redis
+              image: "{{ .Values.redismaster.deployment.repository }}:{{ .Values.redismaster.deployment.tag }}"
+              imagePullPolicy: {{ .Values.redismaster.deployment.pullPolicy }}
+              ports:
+                - containerPort: 6379
+---
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: {{ template "guestbookchannel.fullname" . }}-redismasterservice
+  annotations:
+    app.ibm.com/is-local-deployable: "false"
+  labels:
+    app: {{ template "guestbookchannel.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  template:
+    kind: Service
+    apiVersion: v1
+    metadata:
+      name: redis-master
+    spec:
+      type: {{ .Values.redismaster.service.type }}
+      ports:
+        - port: 6379
+      selector:
+        app: {{ template "guestbookchannel.name" . }}
+        release: {{ .Release.Name }}
+        role: master
+        tier: backend

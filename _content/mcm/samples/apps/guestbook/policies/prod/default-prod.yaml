@@ -1,0 +1,75 @@
+apiVersion: compliance.mcm.ibm.com/v1alpha1
+kind: Compliance
+metadata:
+  name: default-prod
+  namespace: mcm
+spec:
+  runtime-rules:
+    - apiVersion: policy.mcm.ibm.com/v1alpha1
+      kind: Policy
+      metadata:
+        name: policy-prod
+        labels:
+          targets: prod
+      spec:
+        remediationAction: "enforce" # enforce or inform 
+        complianceType: "musthave" # used as default, when missing in a particular sub-template
+        namespaces:
+          include: ["default"]
+          exclude: ["kube*"]
+        object-templates:
+          - complianceType: "musthave"
+            objectDefinition:
+              apiVersion: policy/v1beta1
+              kind: PodSecurityPolicy
+              metadata:
+                name: restricted-mcm
+                annotations:
+                  seccomp.security.alpha.kubernetes.io/allowedProfileNames: '*'
+              spec:
+                privileged: false # no priviliedged pods
+                allowPrivilegeEscalation: false 
+                allowedCapabilities:
+                - '*'
+                volumes:
+                - '*'
+                hostNetwork: true
+                hostPorts:
+                - min: 1000 # ports < 1000 are reserved 
+                  max: 65535
+                hostIPC: false
+                hostPID: false
+                runAsUser:
+                  rule: 'RunAsAny'
+                seLinux:
+                  rule: 'RunAsAny'
+                supplementalGroups:
+                  rule: 'RunAsAny'
+                fsGroup:
+                  rule: 'RunAsAny'
+          - complianceType: "musthave"
+            objectDefinition:
+              kind: NetworkPolicy
+              apiVersion: networking.k8s.io/v1
+              metadata:
+                namespace: default
+                name: deny-from-other-namespaces
+              spec:
+                podSelector:
+                  matchLabels:
+                ingress:
+                - from:
+                  - podSelector: {} # accept ingress from all pods within this namespace only
+          - complianceType: "musthave"
+            objectDefinition:
+              apiVersion: v1    
+              kind: LimitRange  
+              metadata:  
+                name: mem-limit-range  
+              spec:  
+                limits:  
+                - default:  
+                    memory: 512Mi  
+                  defaultRequest:  
+                    memory: 256Mi  
+                  type: Container

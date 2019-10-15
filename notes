@@ -1,0 +1,6 @@
+git status
+  587  cd cloudpak-onboard-residency/
+  588  git status
+  589  git checkout gh-pages
+  590  ls
+

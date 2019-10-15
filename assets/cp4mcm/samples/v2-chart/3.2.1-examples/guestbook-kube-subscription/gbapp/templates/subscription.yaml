@@ -1,0 +1,23 @@
+apiVersion: app.ibm.com/v1alpha1
+kind: Subscription
+metadata:
+  name: {{ template "guestbookapplication.fullname" . }}-guestbook
+  labels:
+    app: {{ template "guestbookapplication.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  channel: {{ .Values.channel.namespace }}/{{ .Values.channel.name }}
+{{- if .Values.placement.multicluster.enabled }}
+  placement:
+    placementRef:
+      name: {{ template "guestbookapplication.fullname" . }}
+      kind: PlacementRule
+      group: app.ibm.com
+  overrides:
+  - clusterName: "/"
+    clusterOverrides:
+    - path: "metadata.namespace"
+      value: {{ .Values.appInClusterNamespace }}
+{{- end }}

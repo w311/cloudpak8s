@@ -1,0 +1,6 @@
+image:
+  repository: oliveribm
+
+ingress:
+  hosts:
+    - mmssearch.169.50.59.135.nip.io

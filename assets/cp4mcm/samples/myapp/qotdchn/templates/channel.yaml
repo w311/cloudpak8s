@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: entitlement
+spec:
+
+---
+apiVersion: app.ibm.com/v1alpha1
+kind: Channel
+metadata:
+  name: qotdchn
+  namespace: entitlement
+spec:
+  type: HelmRepo
+  pathname: https://kubernetes-charts.storage.googleapis.com

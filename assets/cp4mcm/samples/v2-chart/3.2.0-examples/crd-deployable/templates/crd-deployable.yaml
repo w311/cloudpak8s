@@ -1,0 +1,17 @@
+apiVersion: mcm.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: {{ template "crd-deployable.fullname" . }}-crd
+  labels:
+    name: {{ template "crd-deployable.fullname" . }}-crd
+    app: {{ template "crd-deployable.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  deployer:
+    kind: CustomResourceDefinition
+    kube:
+      namespace: {{ .Values.appInClusterNamespace }}
+      template:
+{{ toYaml .Values.crd | indent 8 }}

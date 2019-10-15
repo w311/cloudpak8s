@@ -1,0 +1,36 @@
+apiVersion: mcm.ibm.com/v1alpha1
+kind: DeployableOverride
+metadata:
+  name: trader
+spec:
+  overrides:
+  - clusterName: productioncluster
+#    namespace: default
+    template:
+        deployer:
+          kind: helm
+          helm:
+            repository: production-repo
+            chartName: app-chart
+ #           chartVersion: 0.11.0
+            values: c29tZXZhbHVlcwo= # somevalues
+  - clusterName: testcluster
+#    namespace: default
+    template:
+        deployer:
+          kind: helm
+          helm:
+            repository: test-repo
+            chartName: app-chart
+  #          chartVersion: 0.11.0
+            values: c29tZXZhbHVlcwo= # someothervalues
+  - clusterName: rhos
+    template:
+        deployer:
+          kind: helm
+          helm:
+            chartUrl
+            repository: test-repo
+            chartName: app-chart
+            values: c29tZXZhbHVlcwo= # someothervalues
+

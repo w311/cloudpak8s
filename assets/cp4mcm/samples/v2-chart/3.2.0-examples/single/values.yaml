@@ -1,0 +1,19 @@
+replicaCount: 1
+
+appInClusterNamespace: default
+
+chart:
+  chartURL: https://kubernetes-charts.storage.googleapis.com/nginx-lego-0.3.1.tgz
+
+targetCluster:
+  labelSelector:
+    matchLabels:
+      environment: Dev
+
+app:
+  selector:
+    matchLabels:
+      app: single
+  componentKinds:
+  - group: core
+    kind: Pods

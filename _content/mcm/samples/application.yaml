@@ -1,0 +1,24 @@
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: {{ template "mq.fullname" . }}
+  labels:
+    app: {{ template "mq.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    name: {{ template "mq.fullname" . }}
+spec:
+  selector:
+    matchExpressions:
+    - key: release
+      operator: In
+      values:
+      - {{ .Release.Name }}
+  componentKinds:
+  - group: apps
+    kind: Pods
+  - group: apps
+    kind: StatefulSet
+  - group: core
+    kind: Service

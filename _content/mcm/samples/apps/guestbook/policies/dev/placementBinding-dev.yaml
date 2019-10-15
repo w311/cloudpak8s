@@ -1,0 +1,16 @@
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementBinding
+metadata:
+  name: default-binding-dev
+  namespace: mcm
+placementRef:
+  name: default-placement-dev
+subjects:
+- name: default-dev
+  kind: Compliance
+
+
+
+
+
+              

@@ -1,0 +1,47 @@
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementBinding
+metadata:
+  name: {{ template "trader.fullname" . }}
+  labels:
+    app: {{ template "trader.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    name: {{ template "trader.fullname" . }}
+    servicekind: CacheService
+    solution: {{ template "trader.name" . }}
+placementRef:
+  apiGroup: mcm.ibm.com
+  kind: PlacementPolicy
+  name: {{ template "trader.fullname" . }}
+subjects:
+- apiGroup: mcm.ibm.com
+  kind: Deployable
+  name: {{ template "trader.name" . }}-loyaltyd
+- apiGroup: mcm.ibm.com
+  kind: Deployable
+  name: {{ template "trader.name" . }}-loyalty-service
+- apiGroup: mcm.ibm.com
+  kind: Deployable
+  name: {{ template "trader.name" . }}-trader
+- apiGroup: mcm.ibm.com
+  kind: Deployable
+  name: {{ template "trader.name" . }}-trader-service 
+- apiGroup: mcm.ibm.com
+  kind: Deployable
+  name: {{ template "trader.name" . }}-quote
+- apiGroup: mcm.ibm.com
+  kind: Deployable
+  name: {{ template "trader.name" . }}-quote-service
+- apiGroup: mcm.ibm.com
+  kind: Deployable
+  name: {{ template "trader.name" . }}-portfolio
+- apiGroup: mcm.ibm.com
+  kind: Deployable
+  name: {{ template "trader.name" . }}-portfolio-service
+- apiGroup: mcm.ibm.com
+  kind: Deployable
+  name: {{ template "trader.name" . }}-notification
+- apiGroup: mcm.ibm.com
+  kind: Deployable
+  name: {{ template "trader.name" . }}-notification-service       

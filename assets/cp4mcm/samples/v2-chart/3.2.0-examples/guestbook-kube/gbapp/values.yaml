@@ -1,0 +1,51 @@
+clusterReplicas: 1
+
+appInClusterNamespace: default
+replicaCount: 1
+
+appInClusterNamespace: default
+
+targetCluster:
+  labelSelector:
+    matchLabels:
+      environment: Dev
+      datacenter: rtp
+  resourceSelector:
+    type: cpu
+  compliances: ""  
+
+redismaster:
+  targetCluster:
+    clusterLables:
+      matchLabels:
+        environment: Dev
+    resourceHint:
+      type: cpu
+  repository: gcr.io/kubernetes-e2e-test-images/redis
+  tag: "1.0"
+  pullPolicy: IfNotPresent
+  replicaCount: 1
+  service:
+    type: NodePort
+ 
+frontend:
+  targetCluster:
+    clusterLables:
+      matchLabels:
+        environment: Dev
+    resourceHint:
+      type: cpu
+  replicaCount: 1
+  repository: gcr.io/google-samples/gb-frontend
+  tag: v6
+  pullPolicy: IfNotPresent
+  service:
+    type: NodePort
+ 
+redisslave:
+  repository: gcr.io/google_samples/gb-redisslave
+  tag: v3
+  pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+ 

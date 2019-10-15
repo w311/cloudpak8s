@@ -1,0 +1,72 @@
+apiVersion: mcm.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: {{ template "guestbookapplication.fullname" . }}-redisslave
+  labels:
+    app: {{ template "guestbookapplication.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    name: {{ template "guestbookapplication.fullname" . }}-redisslave
+    servicekind: CacheService
+spec:
+  deployer:
+    kind: Deployment
+    kube:
+      namespace: {{ .Values.appInClusterNamespace }}
+      template:
+        metadata:
+          name: {{ template "guestbookapplication.fullname" . }}-redisslave
+        spec:
+          selector:
+            matchLabels:
+              app: {{ template "guestbookapplication.name" . }}
+              role: slave
+              tier: backend
+          replicas: {{ .Values.replicaCount }}
+          template:
+            metadata:
+              labels:
+                app: {{ template "guestbookapplication.name" . }}
+                release: {{ .Release.Name }}
+                role: slave
+                tier: backend
+            spec:
+              containers:
+              - name: {{ .Chart.Name }}
+                image: "{{ .Values.redisslave.repository }}:{{ .Values.redisslave.tag }}"
+                imagePullPolicy: {{ .Values.redisslave.pullPolicy }}
+                ports:
+                  - containerPort: 6379
+                env:
+                - name: GET_HOSTS_FROM
+                  value: dns
+---
+apiVersion: mcm.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: {{ template "guestbookapplication.fullname" . }}-redisslaveservice
+  labels:
+    app: {{ template "guestbookapplication.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    name: {{ template "guestbookapplication.fullname" . }}-redisslaveservice
+    servicekind: CacheService
+spec:
+  deployer:
+    kind: Service
+    kube:
+      namespace: {{ .Values.appInClusterNamespace }}
+      template:
+        metadata:
+          name: redis-slave
+        spec:
+          type: {{ .Values.redisslave.service.type }}
+          ports:
+            - port: 6379
+          selector:
+            app: {{ template "guestbookapplication.name" . }}
+            release: {{ .Release.Name }}
+            role: slave
+            tier: backend

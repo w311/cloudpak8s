@@ -1,0 +1,121 @@
+#Deploy the pod
+apiVersion: mcm.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: {{ template "trader.name" . }}-trader
+  labels:
+    app: {{ template "trader.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    name: {{ template "trader.fullname" . }}
+    servicekind: ApplicationService
+    solution: {{ template "trader.name" . }} 
+spec:
+  deployer:
+    kind: Deployment
+    kube:
+      namespace: {{ .Values.appInClusterNamespace }}
+      template:
+        metadata:
+          name: trader
+          labels:
+            solution: {{ template "trader.name" . }}
+          annotations: { 
+            prism.subkind: Liberty
+           }
+        spec:
+          replicas: {{ .Values.trader.replicaCount }}
+          selector:
+            matchLabels:
+              app: trader
+              version: v1
+              solution: {{ template "trader.name" . }}
+          template:
+            metadata:
+              labels:
+                app: trader
+                version: v1
+                solution: {{ template "trader.name" . }}
+            spec:
+              containers:
+              - name: trader
+                image: websphere-liberty:latest
+                ports:
+                  - containerPort: 9080
+                  - containerPort: 9443
+                imagePullPolicy: Always
+---
+#Deploy the service
+apiVersion: mcm.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: {{ template "trader.name" . }}-trader-service
+  labels:
+    app: {{ template "trader.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    name: {{ template "trader.fullname" . }}
+    servicekind: ApplicationService
+    solution: {{ template "trader.name" . }}
+spec:
+  deployer:
+    kind: Service
+    kube:
+      namespace: {{ .Values.appInClusterNamespace }}
+      template:
+        metadata:
+          name: trader-service
+          labels:
+            app: trader
+            solution: {{ template "trader.name" . }}
+        spec:
+          type: NodePort
+          ports:
+            - name: http
+              protocol: TCP
+              port: 9080
+              targetPort: 9080
+              nodePort: 32388
+            - name: https
+              protocol: TCP
+              port: 9443
+              targetPort: 9443
+              nodePort: 32389
+          selector:
+            app: trader
+##---
+#####Configure the ingress
+##apiVersion: mcm.ibm.com/v1alpha1
+##kind: Deployable
+##metadata:
+##  name: {{ template "trader.fullname" . }}
+##  labels:
+##    app: {{ template "trader.name" . }}
+##    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+##    release: {{ .Release.Name }}
+##    heritage: {{ .Release.Service }}
+##    name: {{ template "trader.fullname" . }}
+##    servicekind: ApplicationService
+##    solution: stock-trader 
+##spec:
+##  deployer:
+##    kind: Ingress
+##    kube:
+##      namespace: {{ .Values.appInClusterNamespace }}
+##      template:
+##        metadata:
+##          name: trader-ingress
+##          labels: 
+##            solution: stock-trader
+##          annotations:
+##            kubernetes.io/ingress.class: "istio"
+##        spec:
+##          rules:
+##          - http:
+##              paths:
+##              - path: /trader/.*
+##                backend:
+##                  serviceName: trader-service
+##                  servicePort: 9443

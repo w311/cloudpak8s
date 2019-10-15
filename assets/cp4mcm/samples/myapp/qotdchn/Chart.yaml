@@ -1,0 +1,4 @@
+apiVersion: v1
+description: 
+name: Quote of the Day Channel chart
+version: 0.1.1

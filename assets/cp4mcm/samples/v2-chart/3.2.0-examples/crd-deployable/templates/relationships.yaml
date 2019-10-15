@@ -1,0 +1,36 @@
+apiVersion: mcm.ibm.com/v1alpha1
+kind: ApplicationRelationship
+metadata:
+  name: {{ template "crd-deployable.fullname" . }}-consumer
+  labels:
+    app: {{ template "crd-deployable.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  destination:
+    kind: Deployable
+    name: {{ template "crd-deployable.fullname" . }}-consumer
+  source:
+    kind: Application
+    name: {{ template "crd-deployable.fullname" . }}
+  type: contains
+
+---
+apiVersion: mcm.ibm.com/v1alpha1
+kind: ApplicationRelationship
+metadata:
+  name: {{ template "crd-deployable.fullname" . }}-crd
+  labels:
+    app: {{ template "crd-deployable.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  destination:
+    kind: Deployable
+    name: {{ template "crd-deployable.fullname" . }}-crd
+  source:
+    kind: Application
+    name: {{ template "crd-deployable.fullname" . }}
+  type: contains

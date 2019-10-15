@@ -1,0 +1,17 @@
+apiVersion: mcm.ibm.com/v1alpha1
+kind: ApplicationRelationship
+metadata:
+  name: {{ template "qodapp.fullname" . }}-dbrel
+  labels:
+    app: {{ template "qodapp.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  destination:
+    kind: Deployable
+    name: {{ template "qodapp.fullname" . }}-db
+  source:
+    kind: Application
+    name: {{ template "qodapp.fullname" . }}
+  type: contains
