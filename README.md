@@ -2,7 +2,7 @@
 
 Simple-to-edit (for developers and non-developers alike) documentation framework.
 
-GitHub Pages site managed under `gh-pages` branch.  Live site can be viewed here:  https://pages.github.ibm.com/CASE/cloudpak-onboard-residency
+GitHub Pages site managed under `gh-pages` branch.  Live site can be viewed here:  https://ibm-cloud-architecture.github.io/cloudpak8s/
 
 ## Development Stuff
 
