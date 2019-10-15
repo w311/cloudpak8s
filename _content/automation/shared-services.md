@@ -32,7 +32,7 @@ yum install unzip
 ```
 tar xzvf DB2_AWSE_REST_Svr_11.1_Lnx_86-64.tar.gz
 unzip DB2_AWSE_Restricted_Activation_11.1.zip
-./server_awse_o/db2setup -r db2server-dba.rsp
+./server_awse_o/db2setup -r db2dba.rsp
 ```
 You will see the following warnings, which you can ignore.
 ```
@@ -50,6 +50,8 @@ DBT3514W  The db2prereqcheck utility failed to find the following 32-bit library
 For more information, see for example [this page](https://www.ibm.com/support/knowledgecenter/en/SSBNJ7_1.4.3/db2/ttnpm_db2_FP1.html) of the IBM Knowledge Center.
 
 ```
+## Expend the archive of the fixpack
+tar xvf v11.1.4fp4a_linuxx64_universal_fixpack.tar.gz
 ## precheck before upgrade
 cd universal
 ./db2prereqcheck -v 11.1.1.1 -i -s
@@ -88,6 +90,7 @@ su - dasusr1
 exit
 
 ## Upgrade DB2
+## In case go to the fixpack universal directory
 cd /data/downloads/db2/fixpack11.1.1/universal
 ./installFixPack -b /opt/ibm/db2/V11.1
 
@@ -154,9 +157,9 @@ cd /mnt/iso/license
 cd /mnt/iso/images
 rpm --force -ihv idsldap*rpm
 
-cd cd /data/downloads/sds
+cd /data/downloads/sds
 unzip sds64-premium-feature-act-pkg.zip
-cd /data/downloads/sds/sdsV6.4/entitlement
+cd sdsV6.4/entitlement
 rpm --force -ihv idsldap-ent64-6.4.0-0.x86_64.rpm
 
 ## Install ibm jdk

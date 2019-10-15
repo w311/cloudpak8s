@@ -1,5 +1,5 @@
 ---
-title: Application deployment with Multi Cloud Manager
+title: Application deployment with Multi Cloud Manager V3.2.1
 weight: 300
 ---
 
@@ -16,6 +16,8 @@ Here is a diagram illustrating the concept of how an `Application` can `Subscrib
 
 Here is a short video to introduce the concept of MCM Application subscription to Channels.
 
+[The Application Channel Subscription model](https://github.ibm.com/CASE/cloudpak-onboard-residency/blob/gh-pages/assets/cp4mcm/videos/channel_subscriptions.mov)
+
 Here is a schematic describing how we now subscribe to a channel which has connected content. Much like a TV broadcast model where households subscribe to different channels for different content streams.
 
 ![Graphic]({{ site.github.url }}/assets/img/cp4mcm/v321_architecture.png)
@@ -29,11 +31,19 @@ Note that there are several different Git branches to the following repository, 
 
 Some applications are for V320 and other are for V321 - read the documents carefully. If you can't see a channel definition associated with the application, then it is not for MCM V321. 
 
+[MCM wrapped application examples](https://github.ibm.com/IBMPrivateCloud/hybrid-cluster-manager-v2-chart)
+
 ### Guestbook 
 
-Deploy Guestbook sample application:
+There are 2 deployment models offered here.
 
-[Deploy components to a single target]({{ site.github.url }}/assets/cp4mcm/samples/3.2.1-examples/guestbook-kube-subscription).
+The first allows you to deploy the 2 application components to different locations
+
+[Deploy components to multiple targets](https://github.ibm.com/IBMPrivateCloud/hybrid-cluster-manager-v2-chart/tree/master/3.2.1-examples/guestbook-kube-subscription-separate)
+
+The second deploys all components to the same location.
+
+[Deploy components to a single target](https://github.ibm.com/IBMPrivateCloud/hybrid-cluster-manager-v2-chart/tree/master/3.2.1-examples/guestbook-kube-subscription).
 
 Clone the repo and then package the Helm charts with ...
 
@@ -176,6 +186,8 @@ Load all of these HELM CHarts into the local Helm Repository
 Our `Application` is going to `Subscribe` to our `Channel` that is connected to our local Helm Repository, and deploy a Helm Chart defined workload.
 
 #### Connecting a `Channel` to the local Helm Repository.
+
+Here is the information that I used about [connecting a channel to a Helm Repository](https://github.ibm.com/IBMPrivateCloud/roadmap/issues/31789])
 
 First we need to get the details of the Helm Repository.
 
@@ -387,7 +399,7 @@ Both will be running in the kube-system namespace..
 
 We have published these assets that we use under the following link.
 
-[YAML]({{ site.github.url }}/assets/cp4mcm/samples/myapp/yaml)
+[YAML](https://github.ibm.com/CASE/cloudpak-onboard-residency/tree/gh-pages/assets/cp4mcm/samples/myapp/yaml)
 
 #### Packaging these MCM Objects in Helm Charts
 
@@ -397,7 +409,7 @@ This work is not complete, but contains a Helm chart for the `Channel` and anoth
 
 **NOTE** Update the label schema in the following objects to reflect `nginx` rather than `qotd`
 
-[Channel Helm Chart]({{ site.github.url }}/assets/cp4mcm/samples/myapp/qotdchn)
+[Channel Helm Chart](https://github.ibm.com/CASE/cloudpak-onboard-residency/tree/gh-pages/assets/cp4mcm/samples/myapp/qotdchn)
 
 
 ```
@@ -413,7 +425,7 @@ tree
 1 directory, 5 files
 ```
 
-[Application Helm Chart]({{ site.github.url }}/assets/cp4mcm/samples/myapp/qotdapp)
+[Application Helm Chart](https://github.ibm.com/CASE/cloudpak-onboard-residency/tree/gh-pages/assets/cp4mcm/samples/myapp/qotdapp)
 
 ```
 tree
@@ -567,8 +579,8 @@ metadata:
   annotations:
     kubectl.kubernetes.io/last-applied-configuration: |
       {"apiVersion":"app.ibm.com/v1alpha1","kind":"PlacementRule","metadata":{"annotations":{},"labels":{"app":"qotdapp"},"name":"qotdrule","namespace":"app-project"},"spec":{"clusterLabels":{"matchLabels":{"name":"mcm"}},"clusterReplicas":1}}
-    mcm.ibm.com/user-group: xxxx
-    mcm.ibm.com/user-identity: xxxx
+    mcm.ibm.com/user-group: c3lzdGVtOmF1dGhlbnRpY2F0ZWQ6b2F1dGgsc3lzdGVtOmF1dGhlbnRpY2F0ZWQ=
+    mcm.ibm.com/user-identity: SUFNI2FuZHlyb2JAY2EuaWJtLmNvbQ==
   creationTimestamp: 2019-09-12T14:45:01Z
   generation: 1
   labels:
@@ -618,8 +630,8 @@ metadata:
     app.ibm.com/deployables: entitlement/qotd-locust-1.1.1,entitlement/qotd-sugarcrm-1.0.7,entitlement/qotd-prometheus-rabbitmq-exporter-0.5.2,entitlement/qotd-dex-2.2.0,entitlement/qotd-hlf-peer-1.2.10,entitlement/qotd-msoms-0.2.0,entitlement/qotd-node-problem-detector-1.5.2,entitlement/qotd-phpbb-6.2.1,entitlement/qotd-kubedb-nt/qotd-metabase-0.8.0,entitlement/qotd-mongodb-replicaset-3.9.6,entitlement/qotd-sysdig-1.4.15
     kubectl.kubernetes.io/last-applied-configuration: |
       {"apiVersion":"app.ibm.com/v1alpha1","kind":"Subscription","metadata":{"annotations":{},"labels":{"app":"qotdapp"},"name":"qotdsub","namespace":"app-project"},"spec":{"channel":"entitlement/qotd","name":"nginx-ingress","overrides":[{"clusterName":"/","clusterOverrides":[{"path":"metadata.namespace","value":"default"}]}],"placement":{"placementRef":{"group":"app.ibm.com","kind":"PlacementRule","name":"qotdrule"}}}}
-    mcm.ibm.com/user-group: xxxx
-    mcm.ibm.com/user-identity: xxxx
+    mcm.ibm.com/user-group: c3lzdGVtOmF1dGhlbnRpY2F0ZWQ6b2F1dGgsc3lzdGVtOmF1dGhlbnRpY2F0ZWQ=
+    mcm.ibm.com/user-identity: SUFNI2FuZHlyb2JAY2EuaWJtLmNvbQ==
   creationTimestamp: 2019-09-12T14:34:11Z
   generation: 4
   labels:
@@ -695,7 +707,7 @@ spec:
         app.ibm.com/hosting-subscription: app-project/qotdsub
         kubectl.kubernetes.io/last-applied-configuration: |
           {"apiVersion":"app.ibm.com/v1alpha1","kind":"Subscription","metadata":{"annotations":{},"labels":{"app":"qotdapp"},"name":"qotdsub","namespace":"app-project"},"spec":{"channel":"entitlement/qotd","name":"nginx-{"placementRef":{"group":"app.ibm.com","kind":"PlacementRule","name":"qotdrule"}}}}
-        mcm.ibm.com/user-group: xxxx
+        mcm.ibm.com/user-group: c3lzdGVtOmF1dGhlbnRpY2F0ZWQ6b2F1dGgsc3lzdGVtOmF1dGhlbnRpY2F0ZWQ=
       labels:
         app: qotdapp
       name: qotdsub
@@ -777,10 +789,25 @@ Here we can see resources available through a channel and details of the deploym
 
 ![Graphic]({{ site.github.url }}/assets/img/cp4mcm/mcm_resource_overview.png)
 
+#### Sample Objects
+
+[Channel](https://github.ibm.com/IBMMulticloudPlatform/channel/blob/master/config/samples/qa_helmrepo_channel.yaml)
+
+[Subscription](https://github.ibm.com/IBMMulticloudPlatform/subscription/blob/master/config/samples/helm_sub.yaml)
+
+
 ### Stocktrader
 
 [Yu Bing Jiao](https://hub.docker.com/r/yubingjiaocn/portfolio)
 
+
+### Other Sample Applications
+
+[MCM wrapped application examples](https://github.ibm.com/IBMPrivateCloud/hybrid-cluster-manager-v2-chart)
+
+## Extra materials
+
+[European Tech Sales Q3 training](https://ibm.box.com/s/hdg3wvx02r3v8cb9hhwxq1u2vb4v4lq4)
 
 ## Exploring the K8S MCM schema
 
