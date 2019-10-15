@@ -19,7 +19,7 @@ title: IBM Cloud Paks Playbook
 logo_tag: IBM Cloud Pak
 
 # NOTE: make sure there’s no trailing slash on your repo URL
-github_repo: https://github.ibm.com/CASE/cloudpak-onboard-residency
+github_repo:  https://github.com/ibm-cloud-architecture/cloudpak8s
 github_branch: gh-pages
 
 email: gangchen@us.ibm.com
