@@ -35,6 +35,6 @@ This repository provides documentation and access to automation for:
 
 ## Links to further information sources
 
-<a href="https://www-03preprod.ibm.com/support/knowledgecenter/SSFC4F_1.1.0_stage/kc_welcome_cloud_pak.html">Knowledge Center</a>
+<a href="https://www.ibm.com/support/knowledgecenter/SSFC4F_1.1.0/kc_welcome_cloud_pak.html">Knowledge Center</a>
 
 <a href="https://www.ibm.com/demos/collection/Cloud-Pak-for-Multicloud-Management/">IBM Demos (Videos, Product Tours and Hands on Labs)</a>
