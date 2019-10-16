@@ -28,10 +28,6 @@ The installer must have access to both the entitled registry and the target clus
 
 The [prerequisites](https://www.ibm.com/support/knowledgecenter/SSCSJL/install-prerequisites.html) include Red Hat OpenShift Container Platform (OCP) version 3.11.
 
-### Overview Videos
-
-A walkthrough for a typical installation is available in a [video](https://www.youtube.com/watch?v=mDrJGz2KaBs) (and with a [voiceover](https://www.youtube.com/watch?v=m03NX5idDQ8)).
-
 ### Installation
 
 The full set of [instructions for installing Cloud Pak for Applications](https://www.ibm.com/support/knowledgecenter/SSCSJL/install-icpa-cli.html) is found in the IBM Knowledge Center.  The installation can per performed from a workstation that is not one of the VMs in the cluster.  This workstation must have access to the entitled registry, the OCP/OKD cluster and the Internet.  
