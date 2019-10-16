@@ -7,6 +7,6 @@ Refer to Knowledge Center [prerequisites](https://www.ibm.com/support/knowledgec
 
 Refer to [OpenShift Container Platform section](../../ocp/prerequisites/) for prerequisites on installing a cluster.  
 
-Refer to [tools installation](cp4a_install_dev_tools_mac/) for prerequisites for developer client install.
+Refer to [tools installation](../cp4a_install_dev_tools_mac/) for prerequisites for developer client install.
 
 Sizing information is also available in the [prerequisites](https://www.ibm.com/support/knowledgecenter/SSCSJL/install-prerequisites.html)
