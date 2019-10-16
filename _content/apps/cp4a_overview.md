@@ -21,7 +21,7 @@ The focus provided here is on running application workloads as containers.
 The Cloud Pak for Applications is a bundle of multiple offerings.
 This diagram provides an overview of what offerings are included and what they would be used for.
 
-![Overview](https://www-03preprod.ibm.com/support/knowledgecenter/SSCSJL/images/icpa_overview.png)
+![Overview](https://www.ibm.com/support/knowledgecenter/SSCSJL/images/icpa_overview.png)
 
 The key offerings reviewed in this installation and usage scenarios are:
 
@@ -36,11 +36,11 @@ These offerings are also included in the Cloud Pak for Applications but not focu
 
 | Offering | Installation Steps | Description |
 | -------- | ------------------ | ----------- |
-| IBM WebSphere Application Server Network Deployment | [Install](https://www-03preprod.ibm.com/support/knowledgecenter/SSCSJL/install-icpa.html) | Continue to run existing WebSphere apps. |
-| IBM WebSphere Application Server | [Install](https://www-03preprod.ibm.com/support/knowledgecenter/SSCSJL/install-icpa.html) | Continue to run existing WebSphere apps. |
-| IBM WebSphere Application Server Liberty Core | [Install](https://www-03preprod.ibm.com/support/knowledgecenter/SSCSJL/install-icpa.html) | Continue to run existing Liberty apps.
-| IBM Mobile Foundation | [Install](https://www-03preprod.ibm.com/support/knowledgecenter/SSCSJL/install-icpa.html) | Run existing mobile apps. |
-| IBM Cloud Private |[Install](https://www-03preprod.ibm.com/support/knowledgecenter/SSCSJL/install-icpa.html) | Migrate existing workloads to OpenShift Container Platform. |
+| IBM WebSphere Application Server Network Deployment | [Install](https://www.ibm.com/support/knowledgecenter/SSCSJL/install-icpa.html) | Continue to run existing WebSphere apps. |
+| IBM WebSphere Application Server | [Install](https://www.ibm.com/support/knowledgecenter/SSCSJL/install-icpa.html) | Continue to run existing WebSphere apps. |
+| IBM WebSphere Application Server Liberty Core | [Install](https://www.ibm.com/support/knowledgecenter/SSCSJL/install-icpa.html) | Continue to run existing Liberty apps.
+| IBM Mobile Foundation | [Install](https://www.ibm.com/support/knowledgecenter/SSCSJL/install-icpa.html) | Run existing mobile apps. |
+| IBM Cloud Private |[Install](https://www.ibm.com/support/knowledgecenter/SSCSJL/install-icpa.html) | Migrate existing workloads to OpenShift Container Platform. |
 
 ## Installation Overview
 
