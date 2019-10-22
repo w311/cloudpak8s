@@ -289,7 +289,7 @@ and then access mails from the local browser on http://127.0.0.1:8025
 - Under **Settings/Notifications** edit the sender email server:
 ![SMTP]({{ site.github.url }}/assets/img/integration/apic-roks/Snip20190910_56.png)
 
-- And select the SMPT server defined under resources:
+- And select the SMTP server defined under resources:
 ![email]({{ site.github.url }}/assets/img/integration/apic-roks/Snip20190910_57.png)
 
 - Start with the **Topology** configuration
