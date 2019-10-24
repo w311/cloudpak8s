@@ -1,5 +1,5 @@
 ---
-title: Red Hat Openshift Kubernetes Service (RHOKS) on IBM Cloud
+title: Red Hat OpenShift on IBM Cloud
 weight: 230
 ---
 
