@@ -1,5 +1,5 @@
 ---
-title: Install managed OCP in IBM Cloud
+title: Install Cloud Pak for Data on Red Hat OpenShift on IBM Cloud
 weight: 300
 ---
 

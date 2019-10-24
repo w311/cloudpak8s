@@ -1,10 +1,10 @@
 ---
-title: Install Add-Ons on Managed Red Hat OpenShift Container Platform (ROKS)
+title: Install Add-Ons on Red Hat OpenShift on IBM Cloud
 weight: 700
 ---
 
 ## **Overview**
-**Note:** Add-ons for Cloud Pak for Data in the IBM Cloud Red Hat OpenShift Container Platform (ROKS) is **NOT** officially supported at this time.  Some add-ons, like data virtualization, may install successfully, but will have an issue during provisioning.  There are technical issues with this and other add-ons, like Db2 Warehouse, where "SELinux" can not be in "enforcing" mode.  However, Red Hat OpenShift itself requires "SELinux" to be in "enforcing" mode.  Since this is a managed environment, access to change this setting is not available. 
+**Note:** Add-ons for Cloud Pak for Data in the Red Hat OpenShift on IBM Cloud is **NOT** officially supported at this time.  Some add-ons, like data virtualization, may install successfully, but will have an issue during provisioning.  There are technical issues with this and other add-ons, like Db2 Warehouse, where "SELinux" can not be in "enforcing" mode.  However, Red Hat OpenShift itself requires "SELinux" to be in "enforcing" mode.  Since this is a managed environment, access to change this setting is not available. 
 There are plans for add-ons to support this environment in the future.  The following describes a way to install the "Watson Machine Learning" add-on which appears to work successfully.  But it should be noted again that this is **NOT** officially supported.
 
 ## Set Up the OpenShift Client CLI Tools and Access the Cluster

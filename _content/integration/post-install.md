@@ -5,12 +5,12 @@ weight: 900
 
 This page contains:
 
-- [Loading ppas and images on ROKs](#loading-ppas-and-images-on-roks)
+- [Loading ppas and images on Red Hat OpenShift on IBM Cloud](#loading-ppas-and-images-on-roks)
 - [Loading ppas and images on-premise](#loading-ppas-and-images-on-premise)
 
-## Loading ppas and images on ROKs
+## Loading ppas and images on Red Hat OpenShift on IBM Cloud
 
-After installing the Integration Cloud Pak, you might wish to load further ppas or images. These instructions describe how to load images on a ROKs, managed service, environment.
+After installing the Integration Cloud Pak, you might wish to load further ppas or images. These instructions describe how to load images on a Red Hat OpenShift on IBM Cloud, managed service, environment.
 
 1. Download the ppas you want to load to your computer or boot node.
 2. We need to expose the docker registry of the OpenShift cluster to your node. To do so:

@@ -6,7 +6,7 @@ weight: 800
 - 
 {:toc}
 
-This page provides the guidance for installing MQ for both on-prem and ROKS.
+This page provides the guidance for installing MQ for both Red Hat OpenShift on-prem and on IBM Cloud.
 
 ### Create MQ instance in Cloud Pak for Integration
 
