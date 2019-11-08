@@ -273,6 +273,64 @@ kubectl port-forward mailhog-55c8c548dc-dphpj 8025:8025 -n apic
 ```
 and then access mails from the local browser on http://127.0.0.1:8025
 
+root@master icp4icontent]# helm init --client-only
+Creating /root/.helm/repository 
+Creating /root/.helm/repository/cache 
+Creating /root/.helm/repository/local 
+Creating /root/.helm/plugins 
+Creating /root/.helm/starters 
+Creating /root/.helm/repository/repositories.yaml 
+Adding stable repo with URL: https://kubernetes-charts.storage.googleapis.com 
+Adding local repo with URL: http://127.0.0.1:8879/charts 
+$HELM_HOME has been configured at /root/.helm.
+Not installing Tiller due to 'client-only' flag having been set
+Happy Helming!
+[root@master icp4icontent]# helm install --name mailhog stable/mailhog --tls
+NAME:   mailhog
+LAST DEPLOYED: Wed Oct 16 22:13:27 2019
+NAMESPACE: apic
+STATUS: DEPLOYED
+
+RESOURCES:
+==> v1/Service
+NAME     TYPE       CLUSTER-IP     EXTERNAL-IP  PORT(S)            AGE
+mailhog  ClusterIP  172.30.151.65  <none>       8025/TCP,1025/TCP  1s
+
+==> v1beta1/Deployment
+NAME     DESIRED  CURRENT  UP-TO-DATE  AVAILABLE  AGE
+mailhog  1        1        1           0          1s
+
+==> v1/Pod(related)
+NAME                      READY  STATUS             RESTARTS  AGE
+mailhog-55c8c548dc-fcdlr  0/1    ContainerCreating  0         1s
+
+
+NOTES:
+**********************************************************************
+This chart has been DEPRECATED and moved to its new home:
+
+* GitHub repo: https://github.com/codecentric/helm-charts
+* Charts repo: https://codecentric.github.io/helm-charts
+
+**********************************************************************
+
+Mailhog can be accessed via ports 8025 (HTTP) and 1025 (SMTP) on the following DNS name from within your cluster:
+mailhog.apic.svc.cluster.local
+
+If you'd like to test your instance, forward the ports locally:
+
+Web UI:
+=======
+
+export POD_NAME=$(kubectl get pods --namespace apic -l "app=mailhog,release=mailhog" -o jsonpath="{.items[0].metadata.name}")
+kubectl port-forward --namespace apic $POD_NAME 8025
+
+SMTP Server:
+============
+
+export POD_NAME=$(kubectl get pods --namespace apic -l "app=mailhog,release=mailhog" -o jsonpath="{.items[0].metadata.name}")
+kubectl port-forward --namespace apic $POD_NAME 102
+
 ### Configuring the API Connect
 
 - Open the Cloud Management Console using the previously defined endpoint, in our case it was: https://mgmt.icp-proxy.icp4i-6550a99fb8cff23207ccecc2183787a9-0001.us-east.containers.appdomain.cloud/admin
