@@ -1,5 +1,5 @@
 ---
-title: Install on Red Hat OpenShift Container Platform (ROKS)
+title: Install on Red Hat OpenShift on IBM Cloud
 weight: 300
 ---
 

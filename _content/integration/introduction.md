@@ -18,7 +18,7 @@ You are not expected to be an expert in any of the Integration portfolio, but so
 ## Table of Contents
 
 - [Pre-requisites](../pre-reqs)
-- [Install on Red Hat OpenShift Container Platform (ROKS)](../roks)
+- [Install on Red Hat OpenShift on IBM Cloud](../roks)
 - Integration: App Connect Enterprise (ACE, including using the ACE Toolkit)
 - API Management: API Connect
 - Queue Manager: MQ

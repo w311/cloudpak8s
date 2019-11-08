@@ -21,13 +21,13 @@ The focus provided here is on running application workloads as containers.
 The Cloud Pak for Applications is a bundle of multiple offerings.
 This diagram provides an overview of what offerings are included and what they would be used for.
 
-![Overview](https://www-03preprod.ibm.com/support/knowledgecenter/SSCSJL/images/icpa_overview.png)
+![Overview](https://www.ibm.com/support/knowledgecenter/SSCSJL/images/icpa_overview.png)
 
 The key offerings reviewed in this installation and usage scenarios are:
 
 | Offering | Installation Steps | Description |
 | -------- | ------------------ | ----------- |
-| Red Hat OpenShift Container Platform | [Install](../../ocp/first_content) | Kubernetes platform required for running application workloads |
+| Red Hat OpenShift Container Platform | [Install](../../ocp/introduction) | Kubernetes platform required for running application workloads |
 | IBM Kabanero Enterprise | [Install](../cp4a_installation) | Open source projects to build, deploy and run applications.  Installs into an OpenShift Container Platform cluster. |
 | Developer Tools | [MacOS](../cp4a_install_dev_tools_mac) / [Windows](../cp4a_install_dev_tools_win) | Tools needed for a developer to build, test and debug applications.
 | Red Hat Runtimes | [Install](https://www.ibm.com/support/knowledgecenter/SSCSJL/install-icpa.html) | Application runtimes and framework for JBoss, Vert.x and Node. |
@@ -36,11 +36,11 @@ These offerings are also included in the Cloud Pak for Applications but not focu
 
 | Offering | Installation Steps | Description |
 | -------- | ------------------ | ----------- |
-| IBM WebSphere Application Server Network Deployment | [Install](https://www-03preprod.ibm.com/support/knowledgecenter/SSCSJL/install-icpa.html) | Continue to run existing WebSphere apps. |
-| IBM WebSphere Application Server | [Install](https://www-03preprod.ibm.com/support/knowledgecenter/SSCSJL/install-icpa.html) | Continue to run existing WebSphere apps. |
-| IBM WebSphere Application Server Liberty Core | [Install](https://www-03preprod.ibm.com/support/knowledgecenter/SSCSJL/install-icpa.html) | Continue to run existing Liberty apps.
-| IBM Mobile Foundation | [Install](https://www-03preprod.ibm.com/support/knowledgecenter/SSCSJL/install-icpa.html) | Run existing mobile apps. |
-| IBM Cloud Private |[Install](https://www-03preprod.ibm.com/support/knowledgecenter/SSCSJL/install-icpa.html) | Migrate existing workloads to OpenShift Container Platform. |
+| IBM WebSphere Application Server Network Deployment | [Install](https://www.ibm.com/support/knowledgecenter/SSCSJL/install-icpa.html) | Continue to run existing WebSphere apps. |
+| IBM WebSphere Application Server | [Install](https://www.ibm.com/support/knowledgecenter/SSCSJL/install-icpa.html) | Continue to run existing WebSphere apps. |
+| IBM WebSphere Application Server Liberty Core | [Install](https://www.ibm.com/support/knowledgecenter/SSCSJL/install-icpa.html) | Continue to run existing Liberty apps.
+| IBM Mobile Foundation | [Install](https://www.ibm.com/support/knowledgecenter/SSCSJL/install-icpa.html) | Run existing mobile apps. |
+| IBM Cloud Private |[Install](https://www.ibm.com/support/knowledgecenter/SSCSJL/install-icpa.html) | Migrate existing workloads to OpenShift Container Platform. |
 
 ## Installation Overview
 
